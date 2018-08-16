@@ -1,0 +1,10 @@
+{
+  "name": "skyux-sdk-testing",
+  "mode": "easy",
+  "compileMode": "aot",
+  "testSettings": {
+    "unit": {
+      "browserSet": "paranoid"
+    }
+  }
+}
