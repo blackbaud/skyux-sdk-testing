@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/testing",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "SKY UX Testing",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
@@ -8,11 +8,11 @@
     "node": ">=8.11.1"
   },
   "scripts": {
-    "skyux": "skyux",
-    "test": "skyux test --coverage library",
-    "test:ci": "skyux test --platform travis --coverage library && npm run build",
     "build": "skyux build-public-library",
-    "start": "skyux serve"
+    "skyux": "skyux",
+    "start": "skyux serve --hmr",
+    "test": "skyux test --coverage library --logFormat none",
+    "test:visual": "skyux e2e --logFormat none"
   },
   "keywords": [],
   "author": "Blackbaud",
@@ -25,12 +25,7 @@
     "url": "https://github.com/blackbaud/skyux-sdk-testing/issues"
   },
   "homepage": "https://github.com/blackbaud/skyux-sdk-testing#readme",
-  "peerDependencies": {
-    "@angular/common": "^4.3.6",
-    "@angular/core": "^4.3.6",
-    "@blackbaud/skyux-builder": "^1.19.3",
-    "@skyux/i18n": ">=3.0.0-alpha.0"
-  },
+  "peerDependencies": {},
   "dependencies": {
     "axe-core": "2.6.1"
   },
@@ -45,11 +40,11 @@
     "@angular/platform-browser": "4.3.6",
     "@angular/platform-browser-dynamic": "4.3.6",
     "@angular/router": "4.3.6",
-    "@blackbaud/skyux": "2.19.0",
-    "@blackbaud/skyux-builder": "1.19.3",
-    "@skyux/builder-utils": "3.0.0-alpha.3",
-    "@skyux/core": "3.0.0-alpha.5",
-    "@skyux/i18n": "3.0.0-alpha.3",
+    "@blackbaud/skyux": "2.24.0",
+    "@blackbaud/skyux-builder": "1.20.2",
+    "@skyux/config": "3.0.0-alpha.1",
+    "@skyux/core": "3.0.1",
+    "@skyux/i18n": "3.0.0-alpha.5",
     "core-js": "2.4.1",
     "rxjs": "5.4.3",
     "ts-node": "3.0.4",
