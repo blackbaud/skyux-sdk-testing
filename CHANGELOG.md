@@ -1,6 +1,10 @@
-# 3.0.0 (2018-09-12)
+# 3.0.0 (2018-09-19)
 
 - Initial major release.
+
+# 3.0.0-alpha.3 (2018-09-19)
+
+- Modified directory structure.
 
 # 3.0.0-alpha.2 (2018-09-11)
 
