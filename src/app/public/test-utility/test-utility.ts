@@ -20,7 +20,7 @@ export class SkyAppTestUtility {
     const event = Object.assign(
       document.createEvent('CustomEvent'),
       settings.keyboardEventInit,
-      settings.additionalEventProperties || {}
+      settings.customEventInit
     );
 
     event.initEvent(eventName, settings.bubbles, settings.cancelable);
