@@ -1,6 +1,6 @@
 # 3.1.0 (2018-12-11)
 
-- Added full customization of dom event object properties
+- Added full customization of dom event object properties. [#8](https://github.com/blackbaud/skyux-sdk-testing/pull/8)
 
 # 3.0.0 (2018-09-20)
 
