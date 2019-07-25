@@ -11,7 +11,7 @@ import {
 } from '@angular/platform-browser';
 
 export class PageObject<C> {
-  public constructor(private fixture: ComponentFixture<C>) {
+  public constructor(protected fixture: ComponentFixture<C>) {
   }
 
   public queryDirective<T>(type: Type<T>): T {
