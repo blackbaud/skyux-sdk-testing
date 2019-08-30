@@ -35,3 +35,9 @@ screenshots-diff-local
 *.ngfactory.ts
 *.ngsummary.json
 yarn.lock
+
+#IDEA
+.idea
+*.iml
+*.ipl
+*.iws
