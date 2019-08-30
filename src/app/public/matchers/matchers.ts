@@ -1,7 +1,4 @@
-import {
-  SkyA11yAnalyzer,
-  SkyA11yAnalyzerConfig
-} from '../a11y';
+import { SkyA11yAnalyzer, SkyA11yAnalyzerConfig } from '../a11y';
 
 const windowRef: any = window;
 
@@ -10,7 +7,8 @@ const matchers: jasmine.CustomMatcherFactories = {
     return {
       compare(
         element: any,
-        callback: () => void = () => {},
+        callback: () => void = () => {
+        },
         config?: SkyA11yAnalyzerConfig
       ): jasmine.CustomMatcherResult {
 
@@ -129,12 +127,10 @@ const matchers: jasmine.CustomMatcherFactories = {
           );
         });
 
-        const result = {
+        return {
           pass: !hasFailure,
           message: message.join('\n')
         };
-
-        return result;
       }
     };
   },
@@ -161,6 +157,23 @@ const matchers: jasmine.CustomMatcherFactories = {
           `Actual element's inner text was: "${actualText}"`;
 
         return result;
+      }
+    };
+  },
+
+  toHaveResourceText(): jasmine.CustomMatcher {
+    return {
+      compare(
+        actual: string,
+        name: string,
+        args: { name: string, args: any[] },
+        callback: () => void = () => {
+        }
+      ): jasmine.CustomMatcherResult {
+        return {
+          message: '',
+          pass: false
+        };
       }
     };
   }

@@ -8,10 +8,26 @@ import {
   SkyAppConfig
 } from '@skyux/config';
 
-import { expect } from './matchers';
+import {
+  SkyAppResourcesService,
+  SkyI18nModule
+} from '@skyux/i18n';
+
+import {
+  EMPTY,
+  of
+} from 'rxjs';
+
+import {
+  expect
+} from './matchers';
 
 describe('Jasmine matchers', () => {
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [SkyI18nModule],
+      providers: [SkyAppResourcesService]
+    });
     document.body.innerHTML = '';
   });
 
@@ -141,7 +157,8 @@ describe('Jasmine matchers', () => {
 
       it('should allow configuration override', async(() => {
         const element = createFailingElement();
-        expect(element).toBeAccessible(() => {}, {
+        expect(element).toBeAccessible(() => {
+        }, {
           rules: {
             'duplicate-id': { enabled: false }
           }
@@ -151,9 +168,66 @@ describe('Jasmine matchers', () => {
       it('should allow SkyAppConfig override', async(
         inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
-          expect(element).toBeAccessible(() => {}, config.skyux.a11y);
+          expect(element).toBeAccessible(() => {
+          }, config.skyux.a11y);
         }))
       );
     });
+  });
+
+  describe('toHaveResourceText', () => {
+    let resourcesService: SkyAppResourcesService;
+    beforeEach(() => {
+      resourcesService = TestBed.get(SkyAppResourcesService);
+    });
+
+    it('should check that the actual text matches text provided by resources', async(() => {
+      const messageKey = 'name';
+      const messageValue: string = 'message from resource';
+      const text = 'message from resource';
+      spyOn(resourcesService, 'getString').and.callFake((name: string) => {
+        if (name === messageKey) {
+          return of(messageValue);
+        } else {
+          return EMPTY;
+        }
+      });
+
+      expect(text).toHaveResourceText(messageKey);
+    }));
+
+    it('should check that the actual text matches text provided by resources with arguments', async(() => {
+      const messageKey = 'nameWithArgs';
+      const messageValue: string = 'message from resources with args = {0}';
+      const messageArgs: any[] = [100];
+      const text: string = 'message from resources with args = 100';
+      spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
+        if (name === messageKey) {
+          return of(messageValue.replace('{0}', args[0]));
+        } else {
+          return EMPTY;
+        }
+      });
+
+      expect(text).toHaveResourceText(messageKey, messageArgs);
+    }));
+
+    it('should fail if the actual text does not match text provided by resources', async(() => {
+      const messageKey = 'nameThatDoesNotExist';
+      const messageValue = 'message from resource';
+      const text = 'Some text that\'s not in the resources';
+      const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
+        expect(message).toEqual(`Expected ${text} to equal ${messageValue}`);
+      });
+
+      spyOn(resourcesService, 'getString').and.returnValue(of(messageValue));
+
+      // This will result in a failure on a consumer unit test.
+      // We're swallowing the error in order to double-check
+      // that the text did not match the resource message
+      expect(text).toHaveResourceText(messageKey, () => {
+        expect(failSpy).toHaveBeenCalled();
+      });
+    }));
   });
 });
