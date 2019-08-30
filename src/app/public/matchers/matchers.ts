@@ -1,4 +1,15 @@
-import { SkyA11yAnalyzer, SkyA11yAnalyzerConfig } from '../a11y';
+import {
+  TestBed
+} from '@angular/core/testing';
+
+import {
+  SkyAppResourcesService
+} from '@skyux/i18n';
+
+import {
+  SkyA11yAnalyzer,
+  SkyA11yAnalyzerConfig
+} from '../a11y';
 
 const windowRef: any = window;
 
@@ -167,12 +178,27 @@ const matchers: jasmine.CustomMatcherFactories = {
         actual: string,
         name: string,
         args: { name: string, args: any[] },
-        callback: () => void = () => {
-        }
+        callback: () => void = () => {}
       ): jasmine.CustomMatcherResult {
+
+        let skyAppResourcesService: SkyAppResourcesService = TestBed.get(SkyAppResourcesService);
+        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+          if (actual !== message) {
+            windowRef.fail(`Expected ${actual} to equal ${message}`);
+            callback();
+          }
+        });
+
+        // Asynchronous matchers are currently unsupported, but
+        // the method above works to fail the specific test in the
+        // callback manually, if checks do not pass.
+        // ---
+        // A side effect of this technique is the matcher cannot be
+        // paired with a `.not.toHaveResourceText` operator (since the returned
+        // result is always `true`).
         return {
           message: '',
-          pass: false
+          pass: true
         };
       }
     };
