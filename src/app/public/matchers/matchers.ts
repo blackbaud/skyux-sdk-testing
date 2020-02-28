@@ -172,7 +172,7 @@ const matchers: jasmine.CustomMatcherFactories = {
     };
   },
 
-  toHaveResourceText(): jasmine.CustomMatcher {
+  toEqualResourceText(): jasmine.CustomMatcher {
     return {
       compare(
         actual: string,
@@ -185,6 +185,44 @@ const matchers: jasmine.CustomMatcherFactories = {
         skyAppResourcesService.getString(name, args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected ${actual} to equal ${message}`);
+            callback();
+          }
+        });
+
+        // Asynchronous matchers are currently unsupported, but
+        // the method above works to fail the specific test in the
+        // callback manually, if checks do not pass.
+        // ---
+        // A side effect of this technique is the matcher cannot be
+        // paired with a `.not.toHaveResourceText` operator (since the returned
+        // result is always `true`).
+        return {
+          message: '',
+          pass: true
+        };
+      }
+    };
+  },
+
+  toHaveResourceText(): jasmine.CustomMatcher {
+    return {
+      compare(
+        el: any,
+        name: string,
+        args: { name: string, args: any[] },
+        trimWhitespace: boolean = true,
+        callback: () => void = () => {}
+      ): jasmine.CustomMatcherResult {
+        let actual = el.textContent;
+
+        if (trimWhitespace) {
+          actual = actual.trim();
+        }
+
+        let skyAppResourcesService: SkyAppResourcesService = TestBed.get(SkyAppResourcesService);
+        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+          if (actual !== message) {
+            windowRef.fail(`Expected element's inner to be ${message}`);
             callback();
           }
         });

@@ -1,3 +1,7 @@
+# 3.1.1 (2020-02-28)
+
+- Added support for matching resource text
+
 # 3.1.0 (2018-12-11)
 
 - Added support for [`CustomEvent` properties](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) when executing `SkyAppTestUtility.fireDomEvent` method. [#8](https://github.com/blackbaud/skyux-sdk-testing/pull/8)
