@@ -15,12 +15,24 @@ import {
 
 import {
   EMPTY,
-  of
+  Observable
 } from 'rxjs';
+
+import 'rxjs/add/observable/of';
 
 import {
   expect
 } from './matchers';
+
+function createElement(innerText: string): any {
+  const elem = document.createElement('div');
+  const textNode = document.createTextNode(innerText);
+
+  elem.appendChild(textNode);
+  document.body.appendChild(elem);
+
+  return elem;
+}
 
 describe('Jasmine matchers', () => {
   beforeEach(() => {
@@ -157,8 +169,7 @@ describe('Jasmine matchers', () => {
 
       it('should allow configuration override', async(() => {
         const element = createFailingElement();
-        expect(element).toBeAccessible(() => {
-        }, {
+        expect(element).toBeAccessible(() => {}, {
           rules: {
             'duplicate-id': { enabled: false }
           }
@@ -168,8 +179,7 @@ describe('Jasmine matchers', () => {
       it('should allow SkyAppConfig override', async(
         inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
-          expect(element).toBeAccessible(() => {
-          }, config.skyux.a11y);
+          expect(element).toBeAccessible(() => {}, config.skyux.a11y);
         }))
       );
     });
@@ -177,17 +187,19 @@ describe('Jasmine matchers', () => {
 
   describe('toEqualResourceText', () => {
     let resourcesService: SkyAppResourcesService;
+
     beforeEach(() => {
       resourcesService = TestBed.get(SkyAppResourcesService);
     });
 
     it('should check that the actual text matches text provided by resources', async(() => {
       const messageKey = 'name';
-      const messageValue: string = 'message from resource';
+      const messageValue = 'message from resource';
       const text = 'message from resource';
+
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return of(messageValue);
+          return Observable.of(messageValue);
         } else {
           return EMPTY;
         }
@@ -198,28 +210,31 @@ describe('Jasmine matchers', () => {
 
     it('should check that the actual text matches text provided by resources with arguments', async(() => {
       const messageKey = 'nameWithArgs';
-      const messageValue: string = 'message from resources with args = {0}';
+      const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
-      const text: string = 'message from resources with args = 100';
+      const text = 'message from resources with args = 100';
+
       spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
         if (name === messageKey) {
-          return of(messageValue.replace('{0}', args[0]));
+          return Observable.of(messageValue.replace('{0}', args[0]));
         } else {
           return EMPTY;
         }
       });
 
-      expect(text).toEqualResourceText(messageKey, messageArgs);
+      expect(text).toEqualResourceText(messageKey, messageArgs, () => {});
     }));
 
     it('should fail if the actual text does not match text provided by resources', async(() => {
       const messageKey = 'nameThatDoesNotExist';
       const messageValue = 'message from resource';
       const text = 'Some text that\'s not in the resources';
+
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message).toEqual(`Expected ${text} to equal ${messageValue}`);
       });
-      spyOn(resourcesService, 'getString').and.returnValue(of(messageValue));
+
+      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
@@ -232,6 +247,7 @@ describe('Jasmine matchers', () => {
 
   describe('toHaveResourceText', () => {
     let resourcesService: SkyAppResourcesService;
+
     beforeEach(() => {
       resourcesService = TestBed.get(SkyAppResourcesService);
     });
@@ -239,10 +255,11 @@ describe('Jasmine matchers', () => {
     it('should check that the element\'s text matches text provided by resources', async(() => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
-      const elem: any = createElement(messageValue);
+      const elem = createElement(messageValue);
+
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return of(messageValue);
+          return Observable.of(messageValue);
         } else {
           return EMPTY;
         }
@@ -255,9 +272,10 @@ describe('Jasmine matchers', () => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem: any = createElement(`    ${messageValue}     `);
+
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return of(messageValue);
+          return Observable.of(messageValue);
         } else {
           return EMPTY;
         }
@@ -268,12 +286,13 @@ describe('Jasmine matchers', () => {
 
     it('should check that the element\'s text matches text provided by resources with arguments', async(() => {
       const messageKey = 'nameWithArgs';
-      const messageValue: string = 'message from resources with args = {0}';
+      const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
-      const elem: any = createElement(messageValue.replace('{0}', messageArgs[0]));
+      const elem = createElement(messageValue.replace('{0}', messageArgs[0]));
+
       spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
         if (name === messageKey) {
-          return of(messageValue.replace('{0}', args[0]));
+          return Observable.of(messageValue.replace('{0}', args[0]));
         } else {
           return EMPTY;
         }
@@ -285,11 +304,13 @@ describe('Jasmine matchers', () => {
     it('should fail if the element\'s text does not match text provided by resources', async(() => {
       const messageKey = 'nameThatDoesNotExist';
       const messageValue = 'message from resource';
-      const elem: any = createElement('Some text that\'s not in the resources');
+      const elem = createElement('Some text that\'s not in the resources');
+
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message).toEqual(`Expected element's inner to be ${messageValue}`);
       });
-      spyOn(resourcesService, 'getString').and.returnValue(of(messageValue));
+
+      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
@@ -302,11 +323,13 @@ describe('Jasmine matchers', () => {
     it('should fail if whitespace is not trimmed and the element\'s text does not match text provided by resources', async(() => {
       const messageKey = 'name';
       const messageValue = 'message from resource';
-      const elem: any = createElement(`    ${messageValue}    `);
+      const elem = createElement(`    ${messageValue}    `);
+
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message).toEqual(`Expected element's inner to be ${messageValue}`);
       });
-      spyOn(resourcesService, 'getString').and.returnValue(of(messageValue));
+
+      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
@@ -317,11 +340,3 @@ describe('Jasmine matchers', () => {
     }));
   });
 });
-
-function createElement(innerText: string): any {
-  const elem = document.createElement('div');
-  const textNode = document.createTextNode(innerText);
-  elem.appendChild(textNode);
-  document.body.appendChild(elem);
-  return elem;
-}

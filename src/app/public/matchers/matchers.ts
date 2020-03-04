@@ -18,8 +18,7 @@ const matchers: jasmine.CustomMatcherFactories = {
     return {
       compare(
         element: any,
-        callback: () => void = () => {
-        },
+        callback: () => void = () => {},
         config?: SkyA11yAnalyzerConfig
       ): jasmine.CustomMatcherResult {
 
@@ -138,10 +137,12 @@ const matchers: jasmine.CustomMatcherFactories = {
           );
         });
 
-        return {
+        const result = {
           pass: !hasFailure,
           message: message.join('\n')
         };
+
+        return result;
       }
     };
   },
