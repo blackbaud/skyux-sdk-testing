@@ -1,3 +1,7 @@
+# 3.2.0 (2020-03-05)
+
+- Added the matchers `toHaveResourceText` and `toEqualResourceText` which compare text strings to resources strings. [#18](https://github.com/blackbaud/skyux-sdk-testing/pull/18) (Thanks [@Blackbaud-JasonBodnar](https://github.com/Blackbaud-JasonBodnar)!)
+
 # 3.1.0 (2018-12-11)
 
 - Added support for [`CustomEvent` properties](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) when executing `SkyAppTestUtility.fireDomEvent` method. [#8](https://github.com/blackbaud/skyux-sdk-testing/pull/8)
