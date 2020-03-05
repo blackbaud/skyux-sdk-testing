@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/testing",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "SKY UX Testing",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
