@@ -1,3 +1,14 @@
+# 4.0.0-rc.0 (2020-04-06)
+
+### New features
+
+- Updated the pipeline to transpile to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
+
+### Breaking changes
+
+- Added support for `axe-core@3.5.3` which includes a few breaking changes (see the [`axe-core` changelog](https://github.com/dequelabs/axe-core/releases/tag/v3.0.0) for details). [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
+- Dropped support for `rxjs@5`. Consumers may install `rxjs-compat@^6` to support older versions of `rxjs`. [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
+
 # 3.2.0 (2020-03-05)
 
 - Added the `toHaveResourceText` and `toEqualResourceText` matchers to to compare text strings to resources strings. [#18](https://github.com/blackbaud/skyux-sdk-testing/pull/18) (Thanks [@Blackbaud-JasonBodnar](https://github.com/Blackbaud-JasonBodnar)!)
