@@ -15,10 +15,8 @@ import {
 
 import {
   EMPTY,
-  Observable
+  of as observableOf
 } from 'rxjs';
-
-import 'rxjs/add/observable/of';
 
 import {
   expect
@@ -199,7 +197,7 @@ describe('Jasmine matchers', () => {
 
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return Observable.of(messageValue);
+          return observableOf(messageValue);
         } else {
           return EMPTY;
         }
@@ -216,7 +214,7 @@ describe('Jasmine matchers', () => {
 
       spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
         if (name === messageKey) {
-          return Observable.of(messageValue.replace('{0}', args[0]));
+          return observableOf(messageValue.replace('{0}', args[0]));
         } else {
           return EMPTY;
         }
@@ -234,7 +232,7 @@ describe('Jasmine matchers', () => {
         expect(message).toEqual(`Expected ${text} to equal ${messageValue}`);
       });
 
-      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
+      spyOn(resourcesService, 'getString').and.returnValue(observableOf(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
@@ -259,7 +257,7 @@ describe('Jasmine matchers', () => {
 
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return Observable.of(messageValue);
+          return observableOf(messageValue);
         } else {
           return EMPTY;
         }
@@ -275,7 +273,7 @@ describe('Jasmine matchers', () => {
 
       spyOn(resourcesService, 'getString').and.callFake((name: string) => {
         if (name === messageKey) {
-          return Observable.of(messageValue);
+          return observableOf(messageValue);
         } else {
           return EMPTY;
         }
@@ -292,7 +290,7 @@ describe('Jasmine matchers', () => {
 
       spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
         if (name === messageKey) {
-          return Observable.of(messageValue.replace('{0}', args[0]));
+          return observableOf(messageValue.replace('{0}', args[0]));
         } else {
           return EMPTY;
         }
@@ -310,7 +308,7 @@ describe('Jasmine matchers', () => {
         expect(message).toEqual(`Expected element's inner to be ${messageValue}`);
       });
 
-      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
+      spyOn(resourcesService, 'getString').and.returnValue(observableOf(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
@@ -329,7 +327,7 @@ describe('Jasmine matchers', () => {
         expect(message).toEqual(`Expected element's inner to be ${messageValue}`);
       });
 
-      spyOn(resourcesService, 'getString').and.returnValue(Observable.of(messageValue));
+      spyOn(resourcesService, 'getString').and.returnValue(observableOf(messageValue));
 
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
