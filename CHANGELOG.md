@@ -1,3 +1,9 @@
+# 4.0.0-rc.1 (2020-04-08)
+
+### Bug fixes
+
+- Added the missing package `@types/axe-core` to dependencies. [#22](https://github.com/blackbaud/skyux-sdk-testing/pull/22)
+
 # 4.0.0-rc.0 (2020-04-06)
 
 ### New features
