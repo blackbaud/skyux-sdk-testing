@@ -1,4 +1,7 @@
 import {
+  Type
+} from '@angular/core';
+import {
   SkyAppTestUtilityDomEventOptions
 } from './test-utility-dom-event-options';
 
@@ -25,5 +28,9 @@ export class SkyAppTestUtility {
 
     event.initEvent(eventName, settings.bubbles, settings.cancelable);
     element.dispatchEvent(event);
+  }
+
+  public static fullSpyOnClass<T>(type: Type<T>): jasmine.SpyObj<T> {
+    return jasmine.createSpyObj(type.name, Object.keys(type.prototype));
   }
 }

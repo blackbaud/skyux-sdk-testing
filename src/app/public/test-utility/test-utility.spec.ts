@@ -59,4 +59,19 @@ describe('Test utility', () => {
     tick();
     expect(listenerCalled).toBeTruthy();
   }));
+
+  it('should create spy with appropriate methods', () => {
+    class MyService {
+      public getFoo(): number {
+        return 1;
+      }
+
+      public setBar(bar: number): void {
+      }
+    }
+
+    const svc: jasmine.SpyObj<MyService> = SkyAppTestUtility.fullSpyOnClass(MyService);
+    expect(svc.getFoo.and.constructor.name).toEqual('SpyStrategy');
+    expect(svc.setBar.and.constructor.name).toEqual('SpyStrategy');
+  });
 });

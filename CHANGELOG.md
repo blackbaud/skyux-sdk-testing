@@ -1,3 +1,7 @@
+# 3.4.0 (2020-05-11)
+
+- Added the `fullSpyOnClass` utility function. [#23](https://github.com/blackbaud/skyux-sdk-testing/pull/23)
+
 # 3.3.0 (2020-04-30)
 
 - Added the `SkyMatchers` interface to enable IDE code completion for the `expect()` function. [#25](https://github.com/blackbaud/skyux-sdk-testing/pull/25) (Thanks [@Blackbaud-KrisMahon](https://github.com/Blackbaud-KrisMahon)!)
