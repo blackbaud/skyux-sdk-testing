@@ -1,6 +1,7 @@
 import {
   Type
 } from '@angular/core';
+
 import {
   SkyAppTestUtilityDomEventOptions
 } from './test-utility-dom-event-options';
