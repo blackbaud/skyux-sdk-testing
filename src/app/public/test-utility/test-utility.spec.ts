@@ -8,7 +8,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DebugElement, Component
+  Component,
+  DebugElement
 } from '@angular/core';
 
 import {
@@ -60,6 +61,7 @@ describe('Test utility', () => {
   afterEach(() => {
     document.body.removeChild(bgEl);
     document.body.removeChild(textEl);
+    document.body.removeChild(inputEl);
   });
 
   it('should use keyboard event values', fakeAsync(() => {
