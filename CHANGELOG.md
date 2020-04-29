@@ -1,3 +1,9 @@
+# 4.0.0-rc.2 (2020-04-29)
+
+### New features
+
+- Added public methods `getText`, `isVisible`, `setInputValue`, `getBackgroundImageUrl`, and `getDebugElementByTestId` to `SkyAppTestUtility`. [#24](https://github.com/blackbaud/skyux-sdk-testing/pull/24)
+
 # 4.0.0-rc.1 (2020-04-08)
 
 ### Bug fixes
