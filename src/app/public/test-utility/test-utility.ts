@@ -80,7 +80,7 @@ export class SkyAppTestUtility {
   /**
    * Sets the value of an input element and triggers its 'input' and 'change' events.
    */
-  public static setInputValue(element: any, value: string) {
+  public static setInputValue(element: any, value: string): void {
     let inputEvent = document.createEvent('Event');
     inputEvent.initEvent('input', false, false);
 
