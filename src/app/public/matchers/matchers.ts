@@ -124,7 +124,7 @@ const matchers: jasmine.CustomMatcherFactories = {
             }
 
             message.push(
-              `Expected element did not have CSS style "${styleName}: ${expectedStyle}"`
+              `Expected element not to have CSS style "${styleName}: ${expectedStyle}"`
             );
           } else {
             message.push(
