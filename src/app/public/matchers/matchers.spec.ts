@@ -21,9 +21,12 @@ import {
 import 'rxjs/add/observable/of';
 
 import {
+  SkyA11yAnalyzerConfig
+} from '../a11y';
+
+import {
   expect
 } from './matchers';
-import { SkyA11yAnalyzerConfig } from '..';
 
 function createElement(innerText: string): any {
   const elem = document.createElement('div');
