@@ -1,3 +1,7 @@
+# 4.0.0-rc.3 (2020-05-07)
+
+- Added bug fixes and features from the `master` branch. [#27](https://github.com/blackbaud/skyux-sdk-testing/pull/27)
+
 # 3.3.0 (2020-04-30)
 
 - Added the `SkyMatchers` interface to enable IDE code completion for the `expect()` function. [#25](https://github.com/blackbaud/skyux-sdk-testing/pull/25) (Thanks [@Blackbaud-KrisMahon](https://github.com/Blackbaud-KrisMahon)!)
