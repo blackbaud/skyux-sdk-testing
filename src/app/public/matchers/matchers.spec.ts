@@ -23,6 +23,10 @@ import {
 } from '../a11y';
 
 import {
+  SkyA11yAnalyzerConfig
+} from '../a11y';
+
+import {
   expect
 } from './matchers';
 
