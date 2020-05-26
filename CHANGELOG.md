@@ -27,7 +27,7 @@
 ### Breaking changes
 
 - Added support for `axe-core@3.5.3` which includes a few breaking changes (see the [`axe-core` changelog](https://github.com/dequelabs/axe-core/releases/tag/v3.0.0) for details). [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
-- Dropped support for `rxjs@5`. Consumers may install `rxjs-compat@^6` to support older versions of `rxjs`. [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
+- Dropped support for `rxjs@5`. Consumers can install `rxjs-compat@^6` to support older versions of `rxjs`. [#21](https://github.com/blackbaud/skyux-sdk-testing/pull/21)
 
 # 3.2.0 (2020-03-05)
 
