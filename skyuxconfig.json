@@ -11,9 +11,9 @@
       "browserSet": "paranoid"
     }
   },
-  "app": {
-    "styles": [
-      "@skyux/theme/css/sky.css"
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "axe-core"
     ]
   }
 }
