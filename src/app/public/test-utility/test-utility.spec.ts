@@ -9,8 +9,15 @@ import {
 
 import {
   Component,
-  DebugElement
+  DebugElement,
+  NgModule
 } from '@angular/core';
+
+import {
+  SkyOverlayInstance,
+  SkyOverlayModule,
+  SkyOverlayService
+} from '@skyux/core';
 
 import {
   SkyAppTestUtility
@@ -37,6 +44,63 @@ class TestParentComponent { }
   template: `<ng-content></ng-content>`
 })
 class TestComponent { }
+
+@Component({
+  selector: 'test-overlay-internal-cmp',
+  template: `
+    <div id="my-modal-content">
+      foobar
+    </div>
+    <ul>
+      <li class="my-item">foo</li>
+      <li class="my-item">bar</li>
+      <li class="my-item">baz</li>
+    </ul>
+  `
+})
+class TestOverlayInternalComponent { }
+
+@Component({
+  selector: 'test-overlay-cmp',
+  template: `
+  <button
+    class="sky-btn sky-btn-primary sky-margin-inline-default"
+    type="button"
+    (click)="launchOverlay()"
+  >
+    Launch overlay
+  </button>
+`
+})
+class TestOverlayComponent {
+
+  public overlays: SkyOverlayInstance;
+
+  constructor(
+    public overlayService: SkyOverlayService
+  ) { }
+
+  public launchOverlay(): void {
+    const overlayInstance = this.overlayService.create({});
+
+    const componentInstance = overlayInstance.attachComponent(
+      TestOverlayInternalComponent
+    );
+
+    this.overlays = overlayInstance;
+  }
+}
+
+@NgModule({
+  declarations: [
+    TestOverlayComponent,
+    TestOverlayInternalComponent
+  ],
+  entryComponents: [
+    TestOverlayInternalComponent
+  ]
+})
+class OverlayTestModule {}
 
 //#endregion
 
@@ -222,4 +286,79 @@ describe('Test utility', () => {
       );
     });
   });
+
+  describe('overlay selector', function () {
+    let fixture: ComponentFixture<TestOverlayComponent>;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          SkyOverlayModule,
+          OverlayTestModule
+        ]
+      });
+      fixture = TestBed.createComponent(TestOverlayComponent);
+      fixture.detectChanges();
+    });
+
+    afterEach(() => {
+      fixture.destroy();
+    });
+
+    it('should get a descendant of the overlay when calling overlayQuerySelector()', () => {
+      fixture.nativeElement.querySelector('button').click();
+      fixture.detectChanges();
+
+      const el = SkyAppTestUtility.overlayQuerySelector('#my-modal-content');
+
+      expect(el).not.toBeNull();
+      expect(SkyAppTestUtility.getText(el)).toEqual('foobar');
+    });
+
+    it('should return null when overlayQuerySelector() is not found', () => {
+      const el = SkyAppTestUtility.overlayQuerySelector('#foobar');
+
+      expect(el).toBeNull();
+    });
+
+    it('should throw error when the overlayQuerySelector argument starts with .sky- or sky-', async() => {
+      expect(() => {
+        SkyAppTestUtility.overlayQuerySelector('.sky-dropdown');
+      }).toThrow();
+
+      expect(() => {
+        SkyAppTestUtility.overlayQuerySelector('sky-dropdown');
+      }).toThrow();
+    });
+
+    it('should get all descendants of the overlay when calling overlayQuerySelectorAll()', () => {
+      fixture.nativeElement.querySelector('button').click();
+      fixture.detectChanges();
+
+      const el = SkyAppTestUtility.overlayQuerySelectorAll('.my-item');
+
+      expect(el).not.toBeNull();
+      expect(el.length).toEqual(3);
+      expect(SkyAppTestUtility.getText(el[0])).toEqual('foo');
+      expect(SkyAppTestUtility.getText(el[1])).toEqual('bar');
+      expect(SkyAppTestUtility.getText(el[2])).toEqual('baz');
+    });
+
+    it('should return null when overlayQuerySelector() is not found', () => {
+      const el = SkyAppTestUtility.overlayQuerySelectorAll('.not-found-item');
+
+      expect(el).toBeNull();
+    });
+
+    it('should throw error when the overlayQuerySelector argument starts with .sky- or sky-', async() => {
+      expect(() => {
+        SkyAppTestUtility.overlayQuerySelectorAll('.sky-dropdown-item');
+      }).toThrow();
+
+      expect(() => {
+        SkyAppTestUtility.overlayQuerySelectorAll('sky-dropdown-item');
+      }).toThrow();
+    });
+  });
+
 });

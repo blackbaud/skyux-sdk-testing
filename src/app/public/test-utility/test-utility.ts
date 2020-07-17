@@ -146,4 +146,46 @@ export class SkyAppTestUtility {
     return skyEl;
   }
 
+  /**
+   * Returns the first element inside the overlay that is a match of the
+   * provided selector. Selector should not contain SKYUX prefixes, as they are for
+   * internal use only and are subject to change.
+   */
+  public static overlayQuerySelector(selector: string): any {
+    if (selector.substring(0, 5) === '.sky-' || selector.substring(0, 4) === 'sky-') {
+      throw new Error(`Selector should not contain SKYUX prefixes.`);
+    }
+
+    const overlay = this.getOverlayElement();
+    if (!overlay) {
+      /* tslint:disable-next-line:no-null-keyword */
+      return null;
+    }
+
+    return overlay.querySelector(selector);
+  }
+
+  /**
+   * Returns all elements inside the overlay that are matches of the provided selector.
+   * Selector should not contain SKYUX prefixes, as they are for internal use only
+   * and are subject to change.
+   */
+  public static overlayQuerySelectorAll(selector: string): NodeListOf<any> {
+    if (selector.substring(0, 5) === '.sky-' || selector.substring(0, 4) === 'sky-') {
+      throw new Error(`Selector should not contain SKYUX prefixes.`);
+    }
+
+    const overlay = this.getOverlayElement();
+    if (!overlay) {
+      /* tslint:disable-next-line:no-null-keyword */
+      return null;
+    }
+
+    return overlay.querySelectorAll(selector);
+  }
+
+  public static getOverlayElement(): HTMLElement {
+    return document.querySelector('sky-overlay');
+  }
+
 }
