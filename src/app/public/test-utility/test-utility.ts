@@ -148,12 +148,16 @@ export class SkyAppTestUtility {
 
   /**
    * Returns the first element inside the overlay that is a match of the
-   * provided selector. Selector should not contain SKYUX prefixes, as they are for
+   * provided selector. Selector should not contain SKY UX prefixes, as they are for
    * internal use only and are subject to change.
    */
   public static overlayQuerySelector(selector: string): any {
-    if (selector.substring(0, 5) === '.sky-' || selector.substring(0, 4) === 'sky-') {
-      throw new Error(`Selector should not contain SKYUX prefixes.`);
+    if (
+      selector.indexOf('.sky-') > -1 ||
+      selector.substring(0, 4) === 'sky-' ||
+      selector.indexOf(' sky-') > -1
+    ) {
+      throw new Error(`Selector should not contain SKY UX prefixes.`);
     }
 
     const overlay = this.getOverlayElement();
@@ -167,12 +171,16 @@ export class SkyAppTestUtility {
 
   /**
    * Returns all elements inside the overlay that are matches of the provided selector.
-   * Selector should not contain SKYUX prefixes, as they are for internal use only
+   * Selector should not contain SKY UX prefixes, as they are for internal use only
    * and are subject to change.
    */
   public static overlayQuerySelectorAll(selector: string): NodeListOf<any> {
-    if (selector.substring(0, 5) === '.sky-' || selector.substring(0, 4) === 'sky-') {
-      throw new Error(`Selector should not contain SKYUX prefixes.`);
+    if (
+      selector.indexOf('.sky-') > -1 ||
+      selector.substring(0, 4) === 'sky-' ||
+      selector.indexOf(' sky-') > -1
+    ) {
+      throw new Error(`Selector should not contain SKY UX prefixes.`);
     }
 
     const overlay = this.getOverlayElement();
