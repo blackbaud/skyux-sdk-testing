@@ -184,6 +184,9 @@ export class SkyAppTestUtility {
     return overlay.querySelectorAll(selector);
   }
 
+  /**
+   * Returns the overlay host element.
+   */
   public static getOverlayElement(): HTMLElement {
     return document.querySelector('sky-overlay');
   }
