@@ -83,7 +83,7 @@ class TestOverlayComponent {
   public launchOverlay(): void {
     const overlayInstance = this.overlayService.create({});
 
-    const componentInstance = overlayInstance.attachComponent(
+    overlayInstance.attachComponent(
       TestOverlayInternalComponent
     );
 
