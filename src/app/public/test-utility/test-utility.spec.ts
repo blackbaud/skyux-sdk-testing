@@ -344,13 +344,13 @@ describe('Test utility', () => {
       expect(SkyAppTestUtility.getText(el[2])).toEqual('baz');
     });
 
-    it('should return null when overlayQuerySelector() is not found', () => {
+    it('should return null when overlayQuerySelectorAll() is not found', () => {
       const el = SkyAppTestUtility.overlayQuerySelectorAll('.not-found-item');
 
       expect(el).toBeNull();
     });
 
-    it('should throw error when the overlayQuerySelector argument starts with .sky- or sky-', async() => {
+    it('should throw error when the overlayQuerySelectorAll argument starts with .sky- or sky-', async() => {
       expect(() => {
         SkyAppTestUtility.overlayQuerySelectorAll('.sky-dropdown-item');
       }).toThrow();
