@@ -194,7 +194,7 @@ describe('Jasmine matchers', () => {
     let resourcesService: SkyAppResourcesService;
 
     beforeEach(() => {
-      resourcesService = TestBed.get(SkyAppResourcesService);
+      resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
     it('should check that the actual text matches text provided by resources', async(() => {
@@ -255,7 +255,7 @@ describe('Jasmine matchers', () => {
     let resourcesService: SkyAppResourcesService;
 
     beforeEach(() => {
-      resourcesService = TestBed.get(SkyAppResourcesService);
+      resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
     it('should check that the element\'s text matches text provided by resources', async(() => {
