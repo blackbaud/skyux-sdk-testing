@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@types/axe-core": "2.0.7",
-    "axe-core": "4.0.1"
+    "axe-core": "3.5.5"
   },
   "devDependencies": {
     "@angular/animations": "9.1.12",
@@ -45,8 +45,8 @@
     "@skyux-sdk/e2e": "4.0.0",
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.0.2",
-    "@skyux/core": "4.1.0",
-    "@skyux/http": "4.0.0",
+    "@skyux/core": "4.1.1",
+    "@skyux/http": "4.0.1",
     "@skyux/i18n": "4.0.1",
     "@skyux/indicators": "4.2.0",
     "@skyux/modals": "4.5.0",
