@@ -17,6 +17,12 @@ export abstract class SkyA11yAnalyzer {
       'aria-valid-attr': { enabled: true },
       'aria-valid-attr-value': { enabled: true },
       'audio-caption': { enabled: true },
+
+      // Chrome browsers ignore autocomplete="off", which forces us to use non-standard values
+      // to disable the browser's native autofill.
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=468153#c164
+      'autocomplete-valid': { enabled: false },
+
       'blink': { enabled: true },
       'button-name': { enabled: true },
       'bypass': { enabled: true },
