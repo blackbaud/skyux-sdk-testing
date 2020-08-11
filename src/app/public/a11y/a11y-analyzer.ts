@@ -37,8 +37,14 @@ export abstract class SkyA11yAnalyzer {
     config?: SkyA11yAnalyzerConfig
   ): Promise<void> {
 
+    // Disable autocomplete-valid
+    // Chrome browsers ignore autocomplete="off", which forces us to use non-standard values
+    // to disable the browser's native autofill.
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=468153#c164
     const defaults: SkyA11yAnalyzerConfig = {
-      rules: { }
+      rules: {
+        'autocomplete-valid': { enabled: false }
+      }
     };
 
     // Enable all rules by default.
