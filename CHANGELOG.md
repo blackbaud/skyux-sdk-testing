@@ -1,6 +1,6 @@
 # 4.1.0 (2020-08-12)
 
-- Updated the accessibility rules to ignore invalid autocomplete values to support disabling autofill on Google Chrome. [#41](https://github.com/blackbaud/skyux-sdk-testing/pull/41)
+- Updated the accessibility rules to ignore invalid autocomplete values to support disabling autofill on Google Chrome. [#40](https://github.com/blackbaud/skyux-sdk-testing/pull/40)
 
 # 4.0.0 (2020-05-26)
 
