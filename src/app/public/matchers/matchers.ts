@@ -415,7 +415,7 @@ interface SkyMatchers<T> extends jasmine.Matchers<T> {
   /**
    * `expect` the actual component to be accessible based on Web Content Accessibility
    * Guidelines 2.0 (WCAG20) Level A and AA success criteria.
-   * @deprecated Use `expectAsync(element).toBeAccessible()` instead.
+   * @deprecated Use `await expectAsync(element).toBeAccessible()` instead.
    * @param callback The callback to execute after accessibility checks run.
    * @param config The configuration settings for overwriting or turning off specific accessibility checks.
    * @see https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests
@@ -426,7 +426,7 @@ interface SkyMatchers<T> extends jasmine.Matchers<T> {
    * `expect` the actual text to equal the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares using ===.
-   * @deprecated Use `expectAsync('Some message.').toEqualResourceText('foo_bar_key')` instead.
+   * @deprecated Use `await expectAsync('Some message.').toEqualResourceText('foo_bar_key')` instead.
    * @param name The resource string to fetch from the resource file and compare against.
    * @param args The string replacement arguments for the expected resource string.
    * @param callback The callback to execute when the comparison fails.
@@ -437,7 +437,7 @@ interface SkyMatchers<T> extends jasmine.Matchers<T> {
    * `expect` the actual element to have the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares using ===.
-   * @deprecated Use `expectAsync(element).toHaveResourceText('foo_bar_key')` instead.
+   * @deprecated Use `await expectAsync(element).toHaveResourceText('foo_bar_key')` instead.
    * @param name The resource string to fetch from the resource file and compare against.
    * @param args The string replacement arguments for the expected resource string.
    * @param trimWhitespace [true] Whether or not to trim whitespace from the actual element text before comparison.
