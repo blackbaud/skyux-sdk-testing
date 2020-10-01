@@ -351,15 +351,15 @@ describe('Jasmine matchers', () => {
   describe('expectAsync', () => {
 
     describe('toBeAccessible', () => {
-      it('should check accessibility', async(async () => {
+      it('should check accessibility', async () => {
         const element = createPassingElement();
         await expectAsync(element).toBeAccessible();
-      }));
+      });
 
-      it('should support the .not. operator', async(async () => {
+      it('should support the .not. operator', async () => {
         const element = createFailingElement();
         await expectAsync(element).not.toBeAccessible();
-      }));
+      });
     });
 
     describe('toEqualResourceText', () => {
@@ -369,7 +369,7 @@ describe('Jasmine matchers', () => {
         resourcesService = TestBed.inject(SkyAppResourcesService);
       });
 
-      it('should check that the actual text matches text provided by resources', async(async () => {
+      it('should check that the actual text matches text provided by resources', async () => {
         const messageKey = 'name';
         const messageValue = 'message from resource';
         const text = 'message from resource';
@@ -383,9 +383,9 @@ describe('Jasmine matchers', () => {
         });
 
         await expectAsync(text).toEqualResourceText(messageKey);
-      }));
+      });
 
-      it('should check that the actual text matches text provided by resources with arguments', async(async () => {
+      it('should check that the actual text matches text provided by resources with arguments', async () => {
         const messageKey = 'nameWithArgs';
         const messageValue = 'message from resources with args = {0}';
         const messageArgs: any[] = [100];
@@ -400,7 +400,7 @@ describe('Jasmine matchers', () => {
         });
 
         await expectAsync(text).toEqualResourceText(messageKey, messageArgs);
-      }));
+      });
 
       it('should fail if the actual text does not match text provided by resources', async () => {
         const messageKey = 'nameThatDoesNotExist';
@@ -420,7 +420,7 @@ describe('Jasmine matchers', () => {
         resourcesService = TestBed.inject(SkyAppResourcesService);
       });
 
-      it('should check that the element\'s text matches text provided by resources', async(async () => {
+      it('should check that the element\'s text matches text provided by resources', async () => {
         const messageKey = 'name';
         const messageValue: string = 'message from resource';
         const elem = createElement(messageValue);
@@ -434,9 +434,9 @@ describe('Jasmine matchers', () => {
         });
 
         await expectAsync(elem).toHaveResourceText(messageKey);
-      }));
+      });
 
-      it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async(async () => {
+      it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async () => {
         const messageKey = 'name';
         const messageValue: string = 'message from resource';
         const elem: any = createElement(`    ${messageValue}     `);
@@ -450,9 +450,9 @@ describe('Jasmine matchers', () => {
         });
 
         await expectAsync(elem).toHaveResourceText(messageKey);
-      }));
+      });
 
-      it('should check that the element\'s text matches text provided by resources with arguments', async(async () => {
+      it('should check that the element\'s text matches text provided by resources with arguments', async () => {
         const messageKey = 'nameWithArgs';
         const messageValue = 'message from resources with args = {0}';
         const messageArgs: any[] = [100];
@@ -467,7 +467,7 @@ describe('Jasmine matchers', () => {
         });
 
         await expectAsync(elem).toHaveResourceText(messageKey, messageArgs);
-      }));
+      });
 
       it('should fail if the element\'s text does not match text provided by resources', async () => {
         const messageKey = 'nameThatDoesNotExist';
