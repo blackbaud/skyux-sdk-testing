@@ -186,7 +186,7 @@ const matchers: jasmine.CustomMatcherFactories = {
       ): jasmine.CustomMatcherResult {
 
         let skyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+        skyAppResourcesService.getString(name, ...args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected "${actual}" to equal "${message}"`);
             callback();
@@ -224,7 +224,7 @@ const matchers: jasmine.CustomMatcherFactories = {
         }
 
         let skyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+        skyAppResourcesService.getString(name, ...args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected element's inner text to be "${message}"`);
             callback();
@@ -279,7 +279,7 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
         const resourcesService: SkyAppResourcesService = TestBed.inject(SkyAppResourcesService);
 
         return new Promise((resolve) => {
-          resourcesService.getString(name, args).toPromise().then(message => {
+          resourcesService.getString(name, ...args).toPromise().then(message => {
             if (actual === message) {
               resolve({
                 pass: true
@@ -312,7 +312,7 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
           }
 
           const resourcesService: SkyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-          resourcesService.getString(name, args).toPromise().then(message => {
+          resourcesService.getString(name, ...args).toPromise().then(message => {
             if (actual === message) {
               resolve({
                 pass: true
