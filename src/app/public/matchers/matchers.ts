@@ -20,9 +20,9 @@ import {
 
 const windowRef: any = window;
 
-function getResourcesObservable(name: string, args: any[]): Observable<string> {
+function getResourcesObservable(name: string, args: any[] = []): Observable<string> {
   const resourcesService = TestBed.inject(SkyAppResourcesService);
-  return resourcesService.getString(name, ...args || []);
+  return resourcesService.getString(name, ...args);
 }
 
 const matchers: jasmine.CustomMatcherFactories = {
