@@ -1,13 +1,29 @@
-import { TestBed } from '@angular/core/testing';
+import {
+  TestBed
+} from '@angular/core/testing';
 
-import { SkyAppResourcesService } from '@skyux/i18n';
-import { Observable } from 'rxjs';
+import {
+  SkyAppResourcesService
+} from '@skyux/i18n';
 
-import { SkyA11yAnalyzer } from '../a11y/a11y-analyzer';
+import {
+  Observable
+} from 'rxjs';
 
-import { SkyA11yAnalyzerConfig } from '../a11y/a11y-analyzer-config';
+import {
+  SkyA11yAnalyzer
+} from '../a11y/a11y-analyzer';
+
+import {
+  SkyA11yAnalyzerConfig
+} from '../a11y/a11y-analyzer-config';
 
 const windowRef: any = window;
+
+function getResourcesObservable(name: string, args: any[]): Observable<string> {
+  const resourcesService = TestBed.inject(SkyAppResourcesService);
+  return resourcesService.getString(name, ...args || []);
+}
 
 const matchers: jasmine.CustomMatcherFactories = {
   toBeAccessible(): jasmine.CustomMatcher {
@@ -133,10 +149,12 @@ const matchers: jasmine.CustomMatcherFactories = {
           );
         });
 
-        return {
+        const result = {
           pass: !hasFailure,
           message: message.join('\n')
         };
+
+        return result;
       }
     };
   },
@@ -447,13 +465,4 @@ export function expect<T>(actual: T): SkyMatchers<T> {
  */
 export function expectAsync<T>(actual: T): SkyAsyncMatchers<T> {
   return windowRef.expectAsync(actual);
-}
-
-function getResourcesObservable(name: string, args: any[]): Observable<string> {
-  let resourcesService = TestBed.inject(SkyAppResourcesService);
-  if (args) {
-    return resourcesService.getString(name, ...args);
-  } else {
-    return resourcesService.getString(name);
-  }
 }

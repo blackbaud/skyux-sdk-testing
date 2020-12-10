@@ -219,10 +219,9 @@ describe('Jasmine matchers', () => {
       const messageArgs: any[] = [100];
       const text = 'message from resources with args = 100';
 
-      spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
-        console.log('*** args', arg);
+      spyOn(resourcesService, 'getString').and.callFake((name: string, arg1: string) => {
         if (name === messageKey) {
-          return observableOf(messageValue.replace('{0}', arg));
+          return observableOf(messageValue.replace('{0}', arg1));
         } else {
           return EMPTY;
         }
@@ -297,9 +296,9 @@ describe('Jasmine matchers', () => {
       const messageArgs: any[] = [100];
       const elem = createElement(messageValue.replace('{0}', messageArgs[0]));
 
-      spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
+      spyOn(resourcesService, 'getString').and.callFake((name: string, arg1: string) => {
         if (name === messageKey) {
-          return observableOf(messageValue.replace('{0}', arg));
+          return observableOf(messageValue.replace('{0}', arg1));
         } else {
           return EMPTY;
         }
@@ -392,9 +391,9 @@ describe('Jasmine matchers', () => {
         const messageArgs: any[] = [100];
         const text = 'message from resources with args = 100';
 
-        spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
+        spyOn(resourcesService, 'getString').and.callFake((name: string, arg1: string) => {
           if (name === messageKey) {
-            return observableOf(messageValue.replace('{0}', arg));
+            return observableOf(messageValue.replace('{0}', arg1));
           } else {
             return EMPTY;
           }
@@ -455,17 +454,21 @@ describe('Jasmine matchers', () => {
 
       it('should check that the element\'s text matches text provided by resources with arguments', async () => {
         const messageKey = 'nameWithArgs';
-        const messageValue = 'message from resources with args = {0}';
-        const messageArgs: any[] = [100];
-        const elem = createElement(messageValue.replace('{0}', messageArgs[0]));
+        const messageValue = 'message from resources with args = {0} and {1}';
+        const messageArgs: any[] = [100, 'foobar'];
 
-        spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
-          if (name === messageKey) {
-            return observableOf(messageValue.replace('{0}', arg));
-          } else {
-            return EMPTY;
-          }
-        });
+        const elem = createElement(
+          messageValue.replace('{0}', messageArgs[0]).replace('{1}', messageArgs[1])
+        );
+
+        spyOn(resourcesService, 'getString').and
+          .callFake((name: string, arg1: string, arg2: string) => {
+            if (name === messageKey) {
+              return observableOf(messageValue.replace('{0}', arg1).replace('{1}', arg2));
+            } else {
+              return EMPTY;
+            }
+          });
 
         await expectAsync(elem).toHaveResourceText(messageKey, messageArgs);
       });
