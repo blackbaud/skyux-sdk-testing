@@ -219,9 +219,10 @@ describe('Jasmine matchers', () => {
       const messageArgs: any[] = [100];
       const text = 'message from resources with args = 100';
 
-      spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
+      spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
+        console.log('*** args', arg);
         if (name === messageKey) {
-          return observableOf(messageValue.replace('{0}', args[0]));
+          return observableOf(messageValue.replace('{0}', arg));
         } else {
           return EMPTY;
         }
@@ -296,9 +297,9 @@ describe('Jasmine matchers', () => {
       const messageArgs: any[] = [100];
       const elem = createElement(messageValue.replace('{0}', messageArgs[0]));
 
-      spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
+      spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
         if (name === messageKey) {
-          return observableOf(messageValue.replace('{0}', args[0]));
+          return observableOf(messageValue.replace('{0}', arg));
         } else {
           return EMPTY;
         }
@@ -391,9 +392,9 @@ describe('Jasmine matchers', () => {
         const messageArgs: any[] = [100];
         const text = 'message from resources with args = 100';
 
-        spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
+        spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
           if (name === messageKey) {
-            return observableOf(messageValue.replace('{0}', args[0]));
+            return observableOf(messageValue.replace('{0}', arg));
           } else {
             return EMPTY;
           }
@@ -458,9 +459,9 @@ describe('Jasmine matchers', () => {
         const messageArgs: any[] = [100];
         const elem = createElement(messageValue.replace('{0}', messageArgs[0]));
 
-        spyOn(resourcesService, 'getString').and.callFake((name: string, args: any[]) => {
+        spyOn(resourcesService, 'getString').and.callFake((name: string, arg: string) => {
           if (name === messageKey) {
-            return observableOf(messageValue.replace('{0}', args[0]));
+            return observableOf(messageValue.replace('{0}', arg));
           } else {
             return EMPTY;
           }

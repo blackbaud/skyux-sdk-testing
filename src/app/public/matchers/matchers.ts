@@ -1,18 +1,11 @@
-import {
-  TestBed
-} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import {
-  SkyAppResourcesService
-} from '@skyux/i18n';
+import { SkyAppResourcesService } from '@skyux/i18n';
+import { Observable } from 'rxjs';
 
-import {
-  SkyA11yAnalyzer
-} from '../a11y/a11y-analyzer';
+import { SkyA11yAnalyzer } from '../a11y/a11y-analyzer';
 
-import {
-  SkyA11yAnalyzerConfig
-} from '../a11y/a11y-analyzer-config';
+import { SkyA11yAnalyzerConfig } from '../a11y/a11y-analyzer-config';
 
 const windowRef: any = window;
 
@@ -140,12 +133,10 @@ const matchers: jasmine.CustomMatcherFactories = {
           );
         });
 
-        const result = {
+        return {
           pass: !hasFailure,
           message: message.join('\n')
         };
-
-        return result;
       }
     };
   },
@@ -185,8 +176,7 @@ const matchers: jasmine.CustomMatcherFactories = {
         callback: () => void = () => {}
       ): jasmine.CustomMatcherResult {
 
-        let skyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+        getResourcesObservable(name, args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected "${actual}" to equal "${message}"`);
             callback();
@@ -223,8 +213,7 @@ const matchers: jasmine.CustomMatcherFactories = {
           actual = actual.trim();
         }
 
-        let skyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-        skyAppResourcesService.getString(name, args).toPromise().then(message => {
+        getResourcesObservable(name, args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected element's inner text to be "${message}"`);
             callback();
@@ -276,10 +265,9 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
         name: string,
         args?: any[]
       ): Promise<jasmine.CustomMatcherResult> {
-        const resourcesService: SkyAppResourcesService = TestBed.inject(SkyAppResourcesService);
 
         return new Promise((resolve) => {
-          resourcesService.getString(name, args).toPromise().then(message => {
+          getResourcesObservable(name, args).toPromise().then(message => {
             if (actual === message) {
               resolve({
                 pass: true
@@ -311,8 +299,7 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
             actual = actual.trim();
           }
 
-          const resourcesService: SkyAppResourcesService = TestBed.inject(SkyAppResourcesService);
-          resourcesService.getString(name, args).toPromise().then(message => {
+          getResourcesObservable(name, args).toPromise().then(message => {
             if (actual === message) {
               resolve({
                 pass: true
@@ -460,4 +447,13 @@ export function expect<T>(actual: T): SkyMatchers<T> {
  */
 export function expectAsync<T>(actual: T): SkyAsyncMatchers<T> {
   return windowRef.expectAsync(actual);
+}
+
+function getResourcesObservable(name: string, args: any[]): Observable<string> {
+  let resourcesService = TestBed.inject(SkyAppResourcesService);
+  if (args) {
+    return resourcesService.getString(name, ...args);
+  } else {
+    return resourcesService.getString(name);
+  }
 }
