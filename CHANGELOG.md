@@ -1,3 +1,8 @@
+# 5.0.0-beta.0 (2021-06-23)
+
+- Initial beta release.
+- Added support for `@angular/core@^12`. [#48](https://github.com/blackbaud/skyux-sdk-testing/pull/48)
+
 # 4.2.3 (2020-12-10)
 
 - Fixed the `toHaveResourceText` matcher to properly handle the `args` array before checking the value. [#47](https://github.com/blackbaud/skyux-sdk-testing/pull/47) (Thanks [@Blackbaud-JasonBodnar](https://github.com/Blackbaud-JasonBodnar)!)
