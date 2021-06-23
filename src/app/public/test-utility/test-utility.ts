@@ -67,14 +67,14 @@ export class SkyAppTestUtility {
   /**
    * Returns true if the element exists on the page.
    */
-  public static isVisible(element: any): boolean {
+  public static isVisible(element: any): boolean | undefined {
     const nativeEl = getNativeEl(element);
 
     if (nativeEl) {
       return getComputedStyle(nativeEl).display !== 'none';
     }
 
-    return false;
+    return undefined;
   }
 
   /**
