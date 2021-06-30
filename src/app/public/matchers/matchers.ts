@@ -30,7 +30,7 @@ const matchers: jasmine.CustomMatcherFactories = {
     return {
       compare(
         element: any,
-        callback: () => void = () => {},
+        callback: () => void = () => { },
         config?: SkyA11yAnalyzerConfig
       ): jasmine.CustomMatcherResult {
 
@@ -53,6 +53,38 @@ const matchers: jasmine.CustomMatcherFactories = {
           message: '',
           pass: true
         };
+      }
+    };
+  },
+
+  toBeVisibleOnScreen(): jasmine.CustomMatcher {
+    return {
+      compare(el: Element): jasmine.CustomMatcherResult {
+        const result = {
+          pass: false,
+          message: ''
+        };
+
+        result.pass = !!el;
+
+        let computedStyle: CSSStyleDeclaration; // Only get this once, not a trivial thing to get
+        if (result.pass) {
+          computedStyle = getComputedStyle(el); // Only get computed style if passing
+          // el style check, does NOT check parents in all cases
+          result.pass = (computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden');
+        }
+
+        if (result.pass) {
+          // Checks if the el has a physical presence.
+          let box: DOMRect = el.getBoundingClientRect();
+          result.pass = !(box.height + box.width === 0);
+        }
+
+        result.message = result.pass ?
+          'Expected element to not be visible' :
+          'Expected element to be visible';
+
+        return result;
       }
     };
   },
@@ -120,7 +152,7 @@ const matchers: jasmine.CustomMatcherFactories = {
 
   toHaveStyle(): jasmine.CustomMatcher {
     return {
-      compare(el: any, expectedStyles: {[index: string]: string}): jasmine.CustomMatcherResult {
+      compare(el: any, expectedStyles: { [index: string]: string }): jasmine.CustomMatcherResult {
         const message: string[] = [];
 
         let hasFailure = false;
@@ -191,7 +223,7 @@ const matchers: jasmine.CustomMatcherFactories = {
         actual: string,
         name: string,
         args?: any[],
-        callback: () => void = () => {}
+        callback: () => void = () => { }
       ): jasmine.CustomMatcherResult {
 
         getResourcesObservable(name, args).toPromise().then(message => {
@@ -223,7 +255,7 @@ const matchers: jasmine.CustomMatcherFactories = {
         name: string,
         args?: any[],
         trimWhitespace: boolean = true,
-        callback: () => void = () => {}
+        callback: () => void = () => { }
       ): jasmine.CustomMatcherResult {
         let actual = el.textContent;
 
@@ -389,7 +421,15 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
   not: SkyMatchers<T>;
 
   /**
+   * `expect` the actual element to be visible V2.
+   * Checks elements style display and visibility and bounding box width/height.
+   * This will not work if the element has position:fixed and the height/width are set to 0.
+   */
+  toBeVisibleOnScreen(): void;
+
+  /**
    * `expect` the actual element to be visible.
+   * @deprecated Use `expect(element).toBeVisibleOnScreen()` instead.
    */
   toBeVisible(): void;
 
@@ -408,7 +448,7 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
    * `expect` the actual element to have the expected style(s).
    * @param expectedStyles An object representing the style(s) to check for.
    */
-  toHaveStyle(expectedStyles: {[index: string]: string}): void;
+  toHaveStyle(expectedStyles: { [index: string]: string }): void;
 
   /**
    * `expect` the actual element to have the expected text.
