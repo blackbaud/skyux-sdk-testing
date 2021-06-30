@@ -66,13 +66,54 @@ describe('Jasmine matchers', () => {
     document.body.innerHTML = '';
   });
 
-  it('should check element visibility', () => {
+  it('should check element visibility using toBeVisible', () => {
     const elem = document.createElement('div');
     document.body.appendChild(elem);
     expect(elem).toBeVisible();
 
     elem.style.display = 'none';
     expect(elem).not.toBeVisible();
+  });
+
+  describe('toBeVisibleOnScreen', () => {
+    let child: HTMLDivElement;
+    let parent: HTMLDivElement;
+    beforeEach(() => {
+      child = document.createElement('div');
+      child.innerText = 'Child';
+      parent = document.createElement('div');
+      parent.innerText = 'Parent';
+      parent.appendChild(child);
+      document.body.appendChild(parent);
+    });
+
+    it('should check element existance', () => {
+      expect(undefined).not.toBeVisibleOnScreen();
+    });
+
+    it('should check element display', () => {
+      expect(child).toBeVisibleOnScreen();
+
+      parent.style.display = 'none';
+      expect(child).not.toBeVisibleOnScreen();
+      parent.style.display = 'block';
+      expect(child).toBeVisibleOnScreen();
+
+      child.style.display = 'none';
+      expect(child).not.toBeVisibleOnScreen();
+    });
+
+    it('should check element visibility', () => {
+      expect(child).toBeVisibleOnScreen();
+
+      parent.style.visibility = 'hidden';
+      expect(child).not.toBeVisibleOnScreen();
+      parent.style.visibility = 'visible';
+      expect(child).toBeVisibleOnScreen();
+
+      child.style.visibility = 'hidden';
+      expect(child).not.toBeVisibleOnScreen();
+    });
   });
 
   it('should check element inner text', () => {
@@ -174,7 +215,7 @@ describe('Jasmine matchers', () => {
 
       it('should allow configuration override', async(() => {
         const element = createFailingElement();
-        expect(element).toBeAccessible(() => {}, {
+        expect(element).toBeAccessible(() => { }, {
           rules: {
             'duplicate-id': { enabled: false }
           }
@@ -184,7 +225,7 @@ describe('Jasmine matchers', () => {
       it('should allow SkyAppConfig override', async(
         inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
-          expect(element).toBeAccessible(() => {}, config.skyux.a11y as SkyA11yAnalyzerConfig);
+          expect(element).toBeAccessible(() => { }, config.skyux.a11y as SkyA11yAnalyzerConfig);
         }))
       );
     });
@@ -227,7 +268,7 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(text).toEqualResourceText(messageKey, messageArgs, () => {});
+      expect(text).toEqualResourceText(messageKey, messageArgs, () => { });
     }));
 
     it('should fail if the actual text does not match text provided by resources', (done) => {
