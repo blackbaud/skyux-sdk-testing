@@ -1,6 +1,6 @@
 # 4.3.0 (2021-07-06)
 
-- Updated the `toBeVisible` matcher to also check for an element's existence, its `visibility` attribute, and its bounding box dimensions. [#50](https://github.com/blackbaud/skyux-sdk-testing/pull/50)
+- Added options to the `toBeVisible` matcher to allow checking for an element's existence, its CSS `visibility` property, and its bounding box dimensions. [#50](https://github.com/blackbaud/skyux-sdk-testing/pull/50) (Thanks [@Sean-Blackbaud](https://github.com/Sean-Blackbaud)!)
 
 # 4.2.3 (2020-12-10)
 
