@@ -57,7 +57,7 @@ const matchers: jasmine.CustomMatcherFactories = {
     };
   },
 
-  toBeVisibleOnScreen(): jasmine.CustomMatcher {
+  toBeVisible(): jasmine.CustomMatcher {
     return {
       compare(el: Element): jasmine.CustomMatcherResult {
         const result = {
@@ -79,25 +79,6 @@ const matchers: jasmine.CustomMatcherFactories = {
           let box: DOMRect = el.getBoundingClientRect();
           result.pass = !(box.height + box.width === 0);
         }
-
-        result.message = result.pass ?
-          'Expected element to not be visible' :
-          'Expected element to be visible';
-
-        return result;
-      }
-    };
-  },
-
-  toBeVisible(): jasmine.CustomMatcher {
-    return {
-      compare(el: Element): jasmine.CustomMatcherResult {
-        const result = {
-          pass: false,
-          message: ''
-        };
-
-        result.pass = getComputedStyle(el).display !== 'none';
 
         result.message = result.pass ?
           'Expected element to not be visible' :
@@ -421,15 +402,9 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
   not: SkyMatchers<T>;
 
   /**
-   * `expect` the actual element to be visible V2.
+   * `expect` the actual element to be visible.
    * Checks elements style display and visibility and bounding box width/height.
    * This will not work if the element has position:fixed and the height/width are set to 0.
-   */
-  toBeVisibleOnScreen(): void;
-
-  /**
-   * `expect` the actual element to be visible.
-   * @deprecated Use `expect(element).toBeVisibleOnScreen()` instead.
    */
   toBeVisible(): void;
 

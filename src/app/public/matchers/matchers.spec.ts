@@ -66,16 +66,7 @@ describe('Jasmine matchers', () => {
     document.body.innerHTML = '';
   });
 
-  it('should check element visibility using toBeVisible', () => {
-    const elem = document.createElement('div');
-    document.body.appendChild(elem);
-    expect(elem).toBeVisible();
-
-    elem.style.display = 'none';
-    expect(elem).not.toBeVisible();
-  });
-
-  describe('toBeVisibleOnScreen', () => {
+  describe('toBeVisible', () => {
     let child: HTMLDivElement;
     let parent: HTMLDivElement;
     beforeEach(() => {
@@ -88,31 +79,31 @@ describe('Jasmine matchers', () => {
     });
 
     it('should check element existance', () => {
-      expect(undefined).not.toBeVisibleOnScreen();
+      expect(undefined).not.toBeVisible();
     });
 
     it('should check element display', () => {
-      expect(child).toBeVisibleOnScreen();
+      expect(child).toBeVisible();
 
       parent.style.display = 'none';
-      expect(child).not.toBeVisibleOnScreen();
+      expect(child).not.toBeVisible();
       parent.style.display = 'block';
-      expect(child).toBeVisibleOnScreen();
+      expect(child).toBeVisible();
 
       child.style.display = 'none';
-      expect(child).not.toBeVisibleOnScreen();
+      expect(child).not.toBeVisible();
     });
 
     it('should check element visibility', () => {
-      expect(child).toBeVisibleOnScreen();
+      expect(child).toBeVisible();
 
       parent.style.visibility = 'hidden';
-      expect(child).not.toBeVisibleOnScreen();
+      expect(child).not.toBeVisible();
       parent.style.visibility = 'visible';
-      expect(child).toBeVisibleOnScreen();
+      expect(child).toBeVisible();
 
       child.style.visibility = 'hidden';
-      expect(child).not.toBeVisibleOnScreen();
+      expect(child).not.toBeVisible();
     });
   });
 
