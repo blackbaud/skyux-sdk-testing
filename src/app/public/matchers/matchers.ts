@@ -404,7 +404,6 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
   /**
    * `expect` the actual element to be visible.
    * Checks elements style display and visibility and bounding box width/height.
-   * This will not work if the element has position:fixed and the height/width are set to 0.
    */
   toBeVisible(): void;
 
