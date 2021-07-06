@@ -16,15 +16,15 @@ export interface SkyToBeVisibleOptions {
   checkCssVisibility?: boolean;
 
   /**
-   * Indicates if the element's existence on the document should be considered when checking an
-   * element's visibility. If the element exists, it is considered visible.
-   */
-  checkElementExists?: boolean;
-
-  /**
    * Indicates if the element's height and width should be considered when checking an element's
    * visibility. If the element has a height and width greater than zero, the element is considered
    * visible.
    */
-  checkElementHasDimension?: boolean;
+  checkDimensions?: boolean;
+
+  /**
+   * Indicates if the element's existence on the document should be considered when checking an
+   * element's visibility. If the element exists, it is considered visible.
+   */
+  checkExists?: boolean;
 }

@@ -67,8 +67,8 @@ const matchers: jasmine.CustomMatcherFactories = {
         const defaults: SkyToBeVisibleOptions = {
           checkCssDisplay: true,
           checkCssVisibility: false,
-          checkElementExists: false,
-          checkElementHasDimension: false
+          checkDimensions: false,
+          checkExists: false
         };
 
         const settings = {...defaults, ...options};
@@ -78,7 +78,7 @@ const matchers: jasmine.CustomMatcherFactories = {
           message: ''
         };
 
-        if (settings.checkElementExists) {
+        if (settings.checkExists) {
           result.pass = !!el;
         }
 
@@ -93,7 +93,7 @@ const matchers: jasmine.CustomMatcherFactories = {
             result.pass = computedStyle.visibility !== 'hidden';
           }
 
-          if (settings.checkElementHasDimension) {
+          if (settings.checkDimensions) {
             const box = el.getBoundingClientRect();
             result.pass = (box.width > 0 && box.height > 0);
           }

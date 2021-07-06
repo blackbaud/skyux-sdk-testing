@@ -80,7 +80,7 @@ describe('Jasmine matchers', () => {
 
     it('should check element existence', () => {
       expect(undefined).not.toBeVisible({
-        checkElementExists: true
+        checkExists: true
       });
     });
 
@@ -118,7 +118,7 @@ describe('Jasmine matchers', () => {
 
     it('should check element dimensions', () => {
       expect(child).toBeVisible({
-        checkElementHasDimension: true
+        checkDimensions: true
       });
 
       child.style.setProperty('height', '0');
@@ -126,7 +126,7 @@ describe('Jasmine matchers', () => {
       child.style.setProperty('position', 'fixed');
 
       expect(child).not.toBeVisible({
-        checkElementHasDimension: true
+        checkDimensions: true
       });
     });
   });
