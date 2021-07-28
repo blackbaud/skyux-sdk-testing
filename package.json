@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/testing",
-  "version": "5.0.0-beta.0",
+  "version": "5.0.0-beta.1",
   "description": "SKY UX Testing",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/blackbaud/skyux-sdk-testing#readme",
   "peerDependencies": {
     "@angular/core": "^9.1.9 || ^12",
-    "@skyux/config": "^4.0.0 || ^5.0.0-beta.0"
+    "@skyux/i18n": "^5.0.0-beta.0"
   },
   "dependencies": {
     "axe-core": "3.5.6"
@@ -40,17 +40,17 @@
     "@angular/router": "9.1.13",
     "@blackbaud/auth-client": "2.48.0",
     "@skyux-sdk/builder": "4.9.0",
-    "@skyux-sdk/builder-plugin-skyux": "4.1.4",
+    "@skyux-sdk/builder-plugin-skyux": "4.2.0",
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.4.0",
-    "@skyux/core": "4.6.0",
+    "@skyux/core": "4.6.2",
     "@skyux/http": "4.2.0",
     "@skyux/i18n": "4.2.1",
-    "@skyux/indicators": "4.10.0",
-    "@skyux/modals": "4.5.4",
+    "@skyux/indicators": "4.11.0",
+    "@skyux/modals": "4.5.5",
     "@skyux/omnibar-interop": "4.0.1",
     "@skyux/router": "4.2.2",
-    "@skyux/theme": "4.17.0",
+    "@skyux/theme": "4.19.0",
     "codelyzer": "5.2.2",
     "rxjs": "6.6.7",
     "ts-node": "8.3.0",
