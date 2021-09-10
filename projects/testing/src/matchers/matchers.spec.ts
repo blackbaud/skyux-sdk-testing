@@ -1,7 +1,10 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
-  async,
+  fakeAsync,
   inject,
-  TestBed
+  TestBed,
+  tick,
+  waitForAsync
 } from '@angular/core/testing';
 
 import {
@@ -60,7 +63,7 @@ describe('Jasmine matchers', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SkyI18nModule],
+      imports: [HttpClientTestingModule, SkyI18nModule],
       providers: [SkyAppResourcesService]
     });
     document.body.innerHTML = '';
@@ -192,12 +195,15 @@ describe('Jasmine matchers', () => {
 
   describe('toBeAccessible', () => {
 
-    it('should check accessibility', async(() => {
+    it('should check accessibility', fakeAsync(() => {
       const element = createPassingElement();
-      expect(element).toBeAccessible();
+      expect(element).toBeAccessible(() => {
+        expect(element).toExist();
+      });
+      tick();
     }));
 
-    it('should fail if accessibility rules fail', async(() => {
+    it('should fail if accessibility rules fail', fakeAsync(() => {
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message.indexOf('duplicate-id') > -1).toEqual(true);
       });
@@ -207,9 +213,9 @@ describe('Jasmine matchers', () => {
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
       // that an accessibility error was indeed logged.
-      expect(element).toBeAccessible(() => {
-        expect(failSpy).toHaveBeenCalled();
-      });
+      expect(element).toBeAccessible();
+      tick();
+      expect(failSpy).toHaveBeenCalled();
     }));
 
     describe('configuration', () => {
@@ -228,20 +234,20 @@ describe('Jasmine matchers', () => {
         });
       });
 
-      it('should allow configuration override', async(() => {
+      it('should allow configuration override', async () => {
         const element = createFailingElement();
-        expect(element).toBeAccessible(() => { }, {
+        await expectAsync(element).toBeAccessible({
           rules: {
             'duplicate-id': { enabled: false }
           }
         });
-      }));
+      });
 
-      it('should allow SkyAppConfig override', async(
-        inject([SkyAppConfig], (config: SkyAppConfig) => {
+      it('should allow SkyAppConfig override',
+        inject([SkyAppConfig], async (config: SkyAppConfig) => {
           const element = createPassingElement();
-          expect(element).toBeAccessible(() => { }, config.skyux.a11y as SkyA11yAnalyzerConfig);
-        }))
+          await expectAsync(element).toBeAccessible(config.skyux.a11y as SkyA11yAnalyzerConfig);
+        })
       );
     });
   });
@@ -253,7 +259,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the actual text matches text provided by resources', async(() => {
+    it('should check that the actual text matches text provided by resources', fakeAsync(() => {
       const messageKey = 'name';
       const messageValue = 'message from resource';
       const text = 'message from resource';
@@ -266,10 +272,12 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(text).toEqualResourceText(messageKey);
+      waitForAsync((done: () => void) => {
+        expect(text).toEqualResourceText(messageKey, [], done);
+      });
     }));
 
-    it('should check that the actual text matches text provided by resources with arguments', async(() => {
+    it('should check that the actual text matches text provided by resources with arguments', async () => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
@@ -283,8 +291,10 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(text).toEqualResourceText(messageKey, messageArgs, () => { });
-    }));
+      waitForAsync((done: Function) => {
+        return expectAsync(text).toEqualResourceText(messageKey, messageArgs).then(() => done());
+      });
+    });
 
     it('should fail if the actual text does not match text provided by resources', (done) => {
       const messageKey = 'nameThatDoesNotExist';
@@ -314,7 +324,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the element\'s text matches text provided by resources', async(() => {
+    it('should check that the element\'s text matches text provided by resources', fakeAsync(() => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem = createElement(messageValue);
@@ -327,10 +337,12 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(elem).toHaveResourceText(messageKey);
+      waitForAsync((done: () => void) => {
+        expect(elem).toHaveResourceText(messageKey, [], undefined, done);
+      });
     }));
 
-    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async(() => {
+    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', fakeAsync(() => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem: any = createElement(`    ${messageValue}     `);
@@ -343,10 +355,10 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(elem).toHaveResourceText(messageKey);
+      return expectAsync(elem).toHaveResourceText(messageKey);
     }));
 
-    it('should check that the element\'s text matches text provided by resources with arguments', async(() => {
+    it('should check that the element\'s text matches text provided by resources with arguments', fakeAsync(() => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];

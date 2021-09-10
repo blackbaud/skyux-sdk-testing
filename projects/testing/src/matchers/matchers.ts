@@ -223,12 +223,16 @@ const matchers: jasmine.CustomMatcherFactories = {
         actual: string,
         name: string,
         args?: any[],
-        callback: () => void = () => { }
+        callback?: () => void
       ): jasmine.CustomMatcherResult {
 
         getResourcesObservable(name, args).toPromise().then(message => {
+          /*istanbul ignore else*/
           if (actual !== message) {
             windowRef.fail(`Expected "${actual}" to equal "${message}"`);
+          }
+          /*istanbul ignore else*/
+          if (callback) {
             callback();
           }
         });
@@ -255,7 +259,7 @@ const matchers: jasmine.CustomMatcherFactories = {
         name: string,
         args?: any[],
         trimWhitespace: boolean = true,
-        callback: () => void = () => { }
+        callback?: () => void
       ): jasmine.CustomMatcherResult {
         let actual = el.textContent;
 
@@ -266,6 +270,9 @@ const matchers: jasmine.CustomMatcherFactories = {
         getResourcesObservable(name, args).toPromise().then(message => {
           if (actual !== message) {
             windowRef.fail(`Expected element's inner text to be "${message}"`);
+          }
+          /*istanbul ignore else*/
+          if (callback) {
             callback();
           }
         });
