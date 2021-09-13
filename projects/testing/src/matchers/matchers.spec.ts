@@ -195,15 +195,14 @@ describe('Jasmine matchers', () => {
 
   describe('toBeAccessible', () => {
 
-    it('should check accessibility', fakeAsync(() => {
+    it('should check accessibility', waitForAsync(() => {
       const element = createPassingElement();
       expect(element).toBeAccessible(() => {
         expect(element).toExist();
       });
-      tick();
     }));
 
-    it('should fail if accessibility rules fail', fakeAsync(() => {
+    it('should fail if accessibility rules fail', waitForAsync(() => {
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message.indexOf('duplicate-id') > -1).toEqual(true);
       });
@@ -213,9 +212,9 @@ describe('Jasmine matchers', () => {
       // This will result in a failure on a consumer unit test.
       // We're swallowing the error in order to double-check
       // that an accessibility error was indeed logged.
-      expect(element).toBeAccessible();
-      tick();
-      expect(failSpy).toHaveBeenCalled();
+      expect(element).toBeAccessible(() => {
+        expect(failSpy).toHaveBeenCalled();
+      });
     }));
 
     describe('configuration', () => {
@@ -243,12 +242,12 @@ describe('Jasmine matchers', () => {
         });
       });
 
-      it('should allow SkyAppConfig override',
-        inject([SkyAppConfig], async (config: SkyAppConfig) => {
+      it('should allow SkyAppConfig override', waitForAsync(
+        inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
-          await expectAsync(element).toBeAccessible(config.skyux.a11y as SkyA11yAnalyzerConfig);
+          expect(element).toBeAccessible(() => {}, config.skyux.a11y as SkyA11yAnalyzerConfig);
         })
-      );
+      ));
     });
   });
 
@@ -259,7 +258,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the actual text matches text provided by resources', fakeAsync(() => {
+    it('should check that the actual text matches text provided by resources', waitForAsync(() => {
       const messageKey = 'name';
       const messageValue = 'message from resource';
       const text = 'message from resource';
@@ -272,12 +271,10 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      waitForAsync((done: () => void) => {
-        expect(text).toEqualResourceText(messageKey, [], done);
-      });
+      expect(text).toEqualResourceText(messageKey);
     }));
 
-    it('should check that the actual text matches text provided by resources with arguments', async () => {
+    it('should check that the actual text matches text provided by resources with arguments', waitForAsync(() => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
@@ -291,10 +288,8 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      waitForAsync((done: Function) => {
-        return expectAsync(text).toEqualResourceText(messageKey, messageArgs).then(() => done());
-      });
-    });
+      expect(text).toEqualResourceText(messageKey, messageArgs);
+    }));
 
     it('should fail if the actual text does not match text provided by resources', (done) => {
       const messageKey = 'nameThatDoesNotExist';
@@ -342,7 +337,7 @@ describe('Jasmine matchers', () => {
       });
     }));
 
-    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', fakeAsync(() => {
+    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async () => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem: any = createElement(`    ${messageValue}     `);
@@ -355,10 +350,10 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      return expectAsync(elem).toHaveResourceText(messageKey);
-    }));
+      expect(elem).toHaveResourceText(messageKey);
+    });
 
-    it('should check that the element\'s text matches text provided by resources with arguments', fakeAsync(() => {
+    it('should check that the element\'s text matches text provided by resources with arguments', () => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
@@ -373,7 +368,7 @@ describe('Jasmine matchers', () => {
       });
 
       expect(elem).toHaveResourceText(messageKey, messageArgs);
-    }));
+    });
 
     it('should fail if the element\'s text does not match text provided by resources', (done) => {
       const messageKey = 'nameThatDoesNotExist';

@@ -34,15 +34,23 @@ const matchers: jasmine.CustomMatcherFactories = {
     return {
       compare(
         element: any,
-        callback: () => void = () => { },
+        callback?: () => void,
         config?: SkyA11yAnalyzerConfig
       ): jasmine.CustomMatcherResult {
 
         SkyA11yAnalyzer.run(element, config)
-          .then(() => callback())
+          .then(() => {
+            /*istanbul ignore else*/
+            if (callback) {
+              callback();
+            }
+          })
           .catch((err) => {
             windowRef.fail(err.message);
-            callback();
+            /*istanbul ignore else*/
+            if (callback) {
+              callback();
+            }
           });
 
         // Asynchronous matchers are currently unsupported, but
