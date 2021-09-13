@@ -233,21 +233,21 @@ describe('Jasmine matchers', () => {
         });
       });
 
-      it('should allow configuration override', async () => {
+      it('should allow configuration override', waitForAsync(() => {
         const element = createFailingElement();
-        await expectAsync(element).toBeAccessible({
+        expect(element).toBeAccessible(() => {}, {
           rules: {
             'duplicate-id': { enabled: false }
           }
         });
-      });
+      }));
 
       it('should allow SkyAppConfig override', waitForAsync(
         inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
           expect(element).toBeAccessible(() => {}, config.skyux.a11y as SkyA11yAnalyzerConfig);
-        })
-      ));
+        }))
+      );
     });
   });
 
@@ -288,7 +288,7 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      expect(text).toEqualResourceText(messageKey, messageArgs);
+      expect(text).toEqualResourceText(messageKey, messageArgs, () => {});
     }));
 
     it('should fail if the actual text does not match text provided by resources', (done) => {
@@ -319,7 +319,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the element\'s text matches text provided by resources', fakeAsync(() => {
+    it('should check that the element\'s text matches text provided by resources', waitForAsync(() => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem = createElement(messageValue);
@@ -332,9 +332,7 @@ describe('Jasmine matchers', () => {
         }
       });
 
-      waitForAsync((done: () => void) => {
-        expect(elem).toHaveResourceText(messageKey, [], undefined, done);
-      });
+      expect(elem).toHaveResourceText(messageKey);
     }));
 
     it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async () => {
@@ -353,7 +351,7 @@ describe('Jasmine matchers', () => {
       expect(elem).toHaveResourceText(messageKey);
     });
 
-    it('should check that the element\'s text matches text provided by resources with arguments', () => {
+    it('should check that the element\'s text matches text provided by resources with arguments', async () => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
