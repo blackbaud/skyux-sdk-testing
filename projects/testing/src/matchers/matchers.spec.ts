@@ -1,7 +1,10 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
-  async,
+  fakeAsync,
   inject,
-  TestBed
+  TestBed,
+  tick,
+  waitForAsync
 } from '@angular/core/testing';
 
 import {
@@ -60,19 +63,75 @@ describe('Jasmine matchers', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SkyI18nModule],
+      imports: [HttpClientTestingModule, SkyI18nModule],
       providers: [SkyAppResourcesService]
     });
     document.body.innerHTML = '';
   });
 
-  it('should check element visibility', () => {
-    const elem = document.createElement('div');
-    document.body.appendChild(elem);
-    expect(elem).toBeVisible();
+  describe('toBeVisible', () => {
+    let child: HTMLDivElement;
+    let parent: HTMLDivElement;
+    beforeEach(() => {
+      child = document.createElement('div');
+      child.innerText = 'Child';
+      parent = document.createElement('div');
+      parent.innerText = 'Parent';
+      parent.appendChild(child);
+      document.body.appendChild(parent);
+    });
 
-    elem.style.display = 'none';
-    expect(elem).not.toBeVisible();
+    it('should check element existence', () => {
+      expect(undefined).not.toBeVisible({
+        checkExists: true
+      });
+    });
+
+    it('should check element CSS display', () => {
+      expect(parent).toBeVisible();
+
+      parent.style.display = 'none';
+      expect(parent).not.toBeVisible();
+    });
+
+    it('should check element CSS visibility', () => {
+      expect(child).toBeVisible({
+        checkCssDisplay: false,
+        checkCssVisibility: true
+      });
+
+      parent.style.visibility = 'hidden';
+      expect(child).not.toBeVisible({
+        checkCssDisplay: false,
+        checkCssVisibility: true
+      });
+
+      parent.style.visibility = 'visible';
+      expect(child).toBeVisible({
+        checkCssDisplay: false,
+        checkCssVisibility: true
+      });
+
+      child.style.visibility = 'hidden';
+      expect(child).not.toBeVisible({
+        checkCssDisplay: false,
+        checkCssVisibility: true
+      });
+    });
+
+    it('should check element dimensions', () => {
+      expect(child).toBeVisible({
+        checkDimensions: true
+      });
+
+      child.style.setProperty('height', '0');
+      child.style.setProperty('width', '0');
+      child.style.setProperty('position', 'fixed');
+
+      expect(child).not.toBeVisible({
+        checkDimensions: true
+      });
+    });
   });
 
   it('should check element inner text', () => {
@@ -136,12 +195,14 @@ describe('Jasmine matchers', () => {
 
   describe('toBeAccessible', () => {
 
-    it('should check accessibility', async(() => {
+    it('should check accessibility', waitForAsync(() => {
       const element = createPassingElement();
-      expect(element).toBeAccessible();
+      expect(element).toBeAccessible(() => {
+        expect(element).toExist();
+      });
     }));
 
-    it('should fail if accessibility rules fail', async(() => {
+    it('should fail if accessibility rules fail', waitForAsync(() => {
       const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
         expect(message.indexOf('duplicate-id') > -1).toEqual(true);
       });
@@ -172,7 +233,7 @@ describe('Jasmine matchers', () => {
         });
       });
 
-      it('should allow configuration override', async(() => {
+      it('should allow configuration override', waitForAsync(() => {
         const element = createFailingElement();
         expect(element).toBeAccessible(() => {}, {
           rules: {
@@ -181,7 +242,7 @@ describe('Jasmine matchers', () => {
         });
       }));
 
-      it('should allow SkyAppConfig override', async(
+      it('should allow SkyAppConfig override', waitForAsync(
         inject([SkyAppConfig], (config: SkyAppConfig) => {
           const element = createPassingElement();
           expect(element).toBeAccessible(() => {}, config.skyux.a11y as SkyA11yAnalyzerConfig);
@@ -197,7 +258,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the actual text matches text provided by resources', async(() => {
+    it('should check that the actual text matches text provided by resources', waitForAsync(() => {
       const messageKey = 'name';
       const messageValue = 'message from resource';
       const text = 'message from resource';
@@ -213,7 +274,7 @@ describe('Jasmine matchers', () => {
       expect(text).toEqualResourceText(messageKey);
     }));
 
-    it('should check that the actual text matches text provided by resources with arguments', async(() => {
+    it('should check that the actual text matches text provided by resources with arguments', waitForAsync(() => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
@@ -258,7 +319,7 @@ describe('Jasmine matchers', () => {
       resourcesService = TestBed.inject(SkyAppResourcesService);
     });
 
-    it('should check that the element\'s text matches text provided by resources', async(() => {
+    it('should check that the element\'s text matches text provided by resources', waitForAsync(() => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem = createElement(messageValue);
@@ -274,7 +335,7 @@ describe('Jasmine matchers', () => {
       expect(elem).toHaveResourceText(messageKey);
     }));
 
-    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async(() => {
+    it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async () => {
       const messageKey = 'name';
       const messageValue: string = 'message from resource';
       const elem: any = createElement(`    ${messageValue}     `);
@@ -288,9 +349,9 @@ describe('Jasmine matchers', () => {
       });
 
       expect(elem).toHaveResourceText(messageKey);
-    }));
+    });
 
-    it('should check that the element\'s text matches text provided by resources with arguments', async(() => {
+    it('should check that the element\'s text matches text provided by resources with arguments', async () => {
       const messageKey = 'nameWithArgs';
       const messageValue = 'message from resources with args = {0}';
       const messageArgs: any[] = [100];
@@ -305,7 +366,7 @@ describe('Jasmine matchers', () => {
       });
 
       expect(elem).toHaveResourceText(messageKey, messageArgs);
-    }));
+    });
 
     it('should fail if the element\'s text does not match text provided by resources', (done) => {
       const messageKey = 'nameThatDoesNotExist';
