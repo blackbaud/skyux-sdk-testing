@@ -1,3 +1,7 @@
+# 5.0.0-beta.2 (2021-09-13)
+
+- Migrated to Angular CLI. [#54](https://github.com/blackbaud/skyux-sdk-testing/pull/54)
+
 # 5.0.0-beta.1 (2021-07-28)
 
 - Removed the peer dependency `@skyux/config` since it was not being used, and replaced it with `@skyux/i18n`. [#53](https://github.com/blackbaud/skyux-sdk-testing/pull/53)

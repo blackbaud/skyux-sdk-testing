@@ -41,6 +41,7 @@
     "@skyux/assets": "^5.0.0-beta.2",
     "@skyux/config": "^5.0.0-beta.1",
     "@skyux/i18n": "^5.0.0-beta.7",
+    "@skyux/packages": "^5.0.0-beta.83",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.28.2",
