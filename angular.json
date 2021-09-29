@@ -32,7 +32,8 @@
             "karmaConfig": "projects/testing/karma.conf.js",
             "codeCoverage": true,
             "codeCoverageExclude": [
-              "**/fixtures/**"
+              "**/fixtures/**",
+              "projects/testing/src/test.ts"
             ],
             "styles": []
           }

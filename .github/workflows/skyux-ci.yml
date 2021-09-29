@@ -1,16 +1,13 @@
 name: SKY UX CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - master
-      - 3.x.x
-      - 5.0.0-next
   push:
     branches:
       - master
-      - 3.x.x
-      - 5.0.0-next
     tags:
       - '*.*.*'
 
