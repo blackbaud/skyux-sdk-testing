@@ -4,10 +4,12 @@ on:
   pull_request:
     branches:
       - master
+      - 4.x.x
       - 3.x.x
   push:
     branches:
       - master
+      - 4.x.x
       - 3.x.x
     tags:
       - '*.*.*'
