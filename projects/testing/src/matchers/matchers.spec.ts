@@ -705,7 +705,7 @@ describe('Jasmine matchers', () => {
           }
         });
 
-        await expect(elem).toMatchResourceTemplate(messageKey);
+        await expectAsync(elem).toMatchResourceTemplate(messageKey);
       });
 
       it('should match when the element\'s text includes the template, regardless of surrounding text', async () => {
@@ -721,7 +721,7 @@ describe('Jasmine matchers', () => {
           }
         });
 
-        await expect(elem).toMatchResourceTemplate(messageKey);
+        await expectAsync(elem).toMatchResourceTemplate(messageKey);
       });
 
       it('should process around template arguments', async () => {
@@ -738,7 +738,7 @@ describe('Jasmine matchers', () => {
           }
         });
 
-        await expect(elem).toMatchResourceTemplate(messageKey);
+        await expectAsync(elem).toMatchResourceTemplate(messageKey);
       });
 
       it('should handle repeated tokens in a matching string', async () => {
@@ -755,26 +755,15 @@ describe('Jasmine matchers', () => {
           }
         });
 
-        await expect(elem).toMatchResourceTemplate(messageKey);
+        await expectAsync(elem).toMatchResourceTemplate(messageKey);
       });
 
       it('should fail if the element\'s text doesn\'t match all repeated tokens', async () => {
         const messageKey = 'nameThatDoesNotExist';
         const messageValue = 'a{0}a{1}a{2}a{3}';
         const elem = createElement('a0a1a2');
-
-        const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
-          expect(message).toEqual(`Expected element's text "${elem.innerText}" to match "${messageValue}"`);
-        });
-
         spyOn(resourcesService, 'getString').and.returnValue(observableOf(messageValue));
-
-        // This will result in a failure on a consumer unit test.
-        // We're swallowing the error in order to double-check
-        // that the text did not match the resource message
-        expect(elem).toMatchResourceTemplate(messageKey, () => {
-          expect(failSpy).toHaveBeenCalled();
-        });
+        await expectAsync(elem).not.toMatchResourceTemplate(messageKey);
       });
 
       it('should default to trimming whitespace and check that the element\'s text matches text provided by resources', async () => {
@@ -790,26 +779,15 @@ describe('Jasmine matchers', () => {
           }
         });
 
-        expect(elem).toMatchResourceTemplate(messageKey);
+        await expectAsync(elem).toMatchResourceTemplate(messageKey);
       });
 
       it('should fail if the element\'s text does not match text provided by resources', async () => {
         const messageKey = 'nameThatDoesNotExist';
         const messageValue = 'message from resource';
         const elem = createElement('Some text that\'s not in the resources');
-
-        const failSpy = spyOn((window as any), 'fail').and.callFake((message: string) => {
-          expect(message).toEqual(`Expected element's text "${elem.innerText}" to match "${messageValue}"`);
-        });
-
         spyOn(resourcesService, 'getString').and.returnValue(observableOf(messageValue));
-
-        // This will result in a failure on a consumer unit test.
-        // We're swallowing the error in order to double-check
-        // that the text did not match the resource message
-        await expect(elem).toMatchResourceTemplate(messageKey, () => {
-          expect(failSpy).toHaveBeenCalled();
-        });
+        await expectAsync(elem).not.toMatchResourceTemplate(messageKey);
       });
     });
   });
