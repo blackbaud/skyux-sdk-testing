@@ -1,6 +1,6 @@
 # 5.1.1 (2021-11-29)
 
-- Added support for Prettier code formatting. []()
+- Added support for Prettier code formatting. [#62](https://github.com/blackbaud/skyux-sdk-testing/pull/62)
 
 # 5.1.0 (2021-11-23)
 
