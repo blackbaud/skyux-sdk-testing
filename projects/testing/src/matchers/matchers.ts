@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SkyAppResourcesService } from '@skyux/i18n';
+import { SkyAppResourcesService, SkyLibResourcesService } from '@skyux/i18n';
 
 import { Observable } from 'rxjs';
 
@@ -17,6 +17,14 @@ function getResourcesObservable(
   args: any[] = []
 ): Observable<string> {
   const resourcesService = TestBed.inject(SkyAppResourcesService);
+  return resourcesService.getString(name, ...args);
+}
+
+function getLibResourcesObservable(
+  name: string,
+  args: any[] = []
+): Observable<string> {
+  const resourcesService = TestBed.inject(SkyLibResourcesService);
   return resourcesService.getString(name, ...args);
 }
 
@@ -275,6 +283,42 @@ const matchers: jasmine.CustomMatcherFactories = {
     };
   },
 
+  toEqualLibResourceText(): jasmine.CustomMatcher {
+    return {
+      compare(
+        actual: string,
+        name: string,
+        args?: any[],
+        callback?: () => void
+      ): jasmine.CustomMatcherResult {
+        getLibResourcesObservable(name, args)
+          .toPromise()
+          .then((message) => {
+            /*istanbul ignore else*/
+            if (actual !== message) {
+              windowRef.fail(`Expected "${actual}" to equal "${message}"`);
+            }
+            /*istanbul ignore else*/
+            if (callback) {
+              callback();
+            }
+          });
+
+        // Asynchronous matchers are currently unsupported, but
+        // the method above works to fail the specific test in the
+        // callback manually, if checks do not pass.
+        // ---
+        // A side effect of this technique is the matcher cannot be
+        // paired with a `.not.toEqualLibResourceText` operator
+        // (since the returned result is always `true`).
+        return {
+          message: '',
+          pass: true,
+        };
+      },
+    };
+  },
+
   toHaveResourceText(): jasmine.CustomMatcher {
     return {
       compare(
@@ -319,6 +363,50 @@ const matchers: jasmine.CustomMatcherFactories = {
     };
   },
 
+  toHaveLibResourceText(): jasmine.CustomMatcher {
+    return {
+      compare(
+        el: any,
+        name: string,
+        args?: any[],
+        trimWhitespace: boolean = true,
+        callback?: () => void
+      ): jasmine.CustomMatcherResult {
+        let actual = el.textContent;
+
+        if (trimWhitespace) {
+          actual = actual.trim();
+        }
+
+        getLibResourcesObservable(name, args)
+          .toPromise()
+          .then((message) => {
+            if (actual !== message) {
+              windowRef.fail(
+                `Expected element's inner text to be "${message}"`
+              );
+            }
+            /*istanbul ignore else*/
+            if (callback) {
+              callback();
+            }
+          });
+
+        // Asynchronous matchers are currently unsupported, but
+        // the method above works to fail the specific test in the
+        // callback manually, if checks do not pass.
+        // ---
+        // A side effect of this technique is the matcher cannot be
+        // paired with a `.not.toHaveLibResourceText` operator
+        // (since the returned result is always `true`).
+        return {
+          message: '',
+          pass: true,
+        };
+      },
+    };
+  },
+
   toMatchResourceTemplate(): jasmine.CustomMatcher {
     return {
       compare(
@@ -349,6 +437,44 @@ const matchers: jasmine.CustomMatcherFactories = {
         // A side effect of this technique is the matcher cannot be
         // paired with a `.not.toHaveResourceText` operator (since the returned
         // result is always `true`).
+        return {
+          message: '',
+          pass: true,
+        };
+      },
+    };
+  },
+
+  toMatchLibResourceTemplate(): jasmine.CustomMatcher {
+    return {
+      compare(
+        el: any,
+        name: string,
+        callback?: () => void
+      ): jasmine.CustomMatcherResult {
+        let actual = el.textContent;
+
+        getLibResourcesObservable(name)
+          .toPromise()
+          .then((message) => {
+            if (!isTemplateMatch(actual, message)) {
+              windowRef.fail(
+                `Expected element's text "${actual}" to match "${message}"`
+              );
+            }
+            /*istanbul ignore else*/
+            if (callback) {
+              callback();
+            }
+          });
+
+        // Asynchronous matchers are currently unsupported, but
+        // the method above works to fail the specific test in the
+        // callback manually, if checks do not pass.
+        // ---
+        // A side effect of this technique is the matcher cannot be
+        // paired with a `.not.toMatchLibResourceTemplate` operator
+        // (since the returned result is always `true`).
         return {
           message: '',
           pass: true,
@@ -410,6 +536,33 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
     };
   },
 
+  toEqualLibResourceText(): jasmine.CustomAsyncMatcher {
+    return {
+      compare(
+        actual: string,
+        name: string,
+        args?: any[]
+      ): Promise<jasmine.CustomMatcherResult> {
+        return new Promise((resolve) => {
+          getLibResourcesObservable(name, args)
+            .toPromise()
+            .then((message) => {
+              if (actual === message) {
+                resolve({
+                  pass: true,
+                });
+              } else {
+                resolve({
+                  pass: false,
+                  message: `Expected "${actual}" to equal "${message}"`,
+                });
+              }
+            });
+        });
+      },
+    };
+  },
+
   toHaveResourceText(): jasmine.CustomAsyncMatcher {
     return {
       compare(
@@ -443,6 +596,39 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
     };
   },
 
+  toHaveLibResourceText(): jasmine.CustomAsyncMatcher {
+    return {
+      compare(
+        element: any,
+        name: string,
+        args?: any[],
+        trimWhitespace: boolean = true
+      ): Promise<jasmine.CustomMatcherResult> {
+        return new Promise((resolve) => {
+          let actual = element.textContent;
+          if (trimWhitespace) {
+            actual = actual.trim();
+          }
+
+          getLibResourcesObservable(name, args)
+            .toPromise()
+            .then((message) => {
+              if (actual === message) {
+                resolve({
+                  pass: true,
+                });
+              } else {
+                resolve({
+                  pass: false,
+                  message: `Expected element's inner text to be "${message}"`,
+                });
+              }
+            });
+        });
+      },
+    };
+  },
+
   toMatchResourceTemplate(): jasmine.CustomAsyncMatcher {
     return {
       compare(
@@ -453,6 +639,34 @@ const asyncMatchers: jasmine.CustomAsyncMatcherFactories = {
           let actual = element.textContent;
 
           getResourcesObservable(name)
+            .toPromise()
+            .then((message) => {
+              if (isTemplateMatch(actual, message)) {
+                resolve({
+                  pass: true,
+                });
+              } else {
+                resolve({
+                  pass: false,
+                  message: `Expected element's text "${actual}" to match "${message}"`,
+                });
+              }
+            });
+        });
+      },
+    };
+  },
+
+  toMatchLibResourceTemplate(): jasmine.CustomAsyncMatcher {
+    return {
+      compare(
+        element: any,
+        name: string
+      ): Promise<jasmine.CustomMatcherResult> {
+        return new Promise((resolve) => {
+          let actual = element.textContent;
+
+          getLibResourcesObservable(name)
             .toPromise()
             .then((message) => {
               if (isTemplateMatch(actual, message)) {
@@ -509,6 +723,18 @@ export interface SkyAsyncMatchers<T> {
   ): Promise<jasmine.CustomMatcherResult>;
 
   /**
+   * `expect` the actual text to equal the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares using ===.
+   * @param name The resource string to fetch from the resource file and compare against.
+   * @param args The string replacement arguments for the expected resource string.
+   */
+  toEqualLibResourceText(
+    name: string,
+    args?: any[]
+  ): Promise<jasmine.CustomMatcherResult>;
+
+  /**
    * `expect` the actual element to have the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares using ===.
@@ -524,6 +750,20 @@ export interface SkyAsyncMatchers<T> {
 
   /**
    * `expect` the actual element to have the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares using ===.
+   * @param name The resource string to fetch from the resource file and compare against.
+   * @param args The string replacement arguments for the expected resource string.
+   * @param trimWhitespace [true] Whether or not to trim whitespace from the actual element text before comparison.
+   */
+  toHaveLibResourceText(
+    name: string,
+    args?: any[],
+    trimWhitespace?: boolean
+  ): Promise<jasmine.CustomMatcherResult>;
+
+  /**
+   * `expect` the actual element to have the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares the tokenized element text against the template.
    * Essentially this matches any text that has the non-parameterized text of the template in the order of the template,
@@ -531,6 +771,16 @@ export interface SkyAsyncMatchers<T> {
    * @param name The resource string to fetch from the resource file and compare against.
    */
   toMatchResourceTemplate(name: string): Promise<jasmine.CustomMatcherResult>;
+
+  /**
+   * `expect` the actual element to have the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares the tokenized element text against the template.
+   * Essentially this matches any text that has the non-parameterized text of the template in the order of the template,
+   * regardless of the value of each of the parameters.
+   * @param name The resource string to fetch from the resource file and compare against.
+   */
+  toMatchLibResourceTemplate(name: string): Promise<jasmine.CustomMatcherResult>;
 }
 
 /**
@@ -594,6 +844,17 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
   toEqualResourceText(name: string, args?: any[], callback?: () => void): void;
 
   /**
+   * `expect` the actual text to equal the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares using ===.
+   * @deprecated Use `await expectAsync('Some message.').toEqualResourceText('foo_bar_key')` instead.
+   * @param name The resource string to fetch from the resource file and compare against.
+   * @param args The string replacement arguments for the expected resource string.
+   * @param callback The callback to execute when the comparison fails.
+   */
+  toEqualLibResourceText(name: string, args?: any[], callback?: () => void): void;
+
+  /**
    * `expect` the actual element to have the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares using ===.
@@ -612,6 +873,23 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
 
   /**
    * `expect` the actual element to have the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares using ===.
+   * @deprecated Use `await expectAsync(element).toHaveResourceText('foo_bar_key')` instead.
+   * @param name The resource string to fetch from the resource file and compare against.
+   * @param args The string replacement arguments for the expected resource string.
+   * @param trimWhitespace [true] Whether or not to trim whitespace from the actual element text before comparison.
+   * @param callback The callback to execute when the comparison fails.
+   */
+  toHaveLibResourceText(
+    name: string,
+    args?: any[],
+    trimWhitespace?: boolean,
+    callback?: () => void
+  ): void;
+
+  /**
+   * `expect` the actual element to have the text for the expected resource string.
    * Uses `SkyAppResourcesService.getString(name, args)` to fetch the expected resource string
    * and compares the tokenized element text against the template.
    * Essentially this matches any text that has the non-parameterized text of the template in the order of the template,
@@ -621,6 +899,18 @@ export interface SkyMatchers<T> extends jasmine.Matchers<T> {
    * @param callback The callback to execute when the comparison fails.
    */
   toMatchResourceTemplate(name: string, callback?: () => void): void;
+
+  /**
+   * `expect` the actual element to have the text for the expected resource string.
+   * Uses `SkyLibResourcesService.getString(name, args)` to fetch the expected resource string
+   * and compares the tokenized element text against the template.
+   * Essentially this matches any text that has the non-parameterized text of the template in the order of the template,
+   * regardless of the value of each of the parameters.
+   * @deprecated Use `await expectAsync(element).toMatchResourceTemplate('foo_bar_key')` instead.
+   * @param name The resource string to fetch from the resource file and compare against.
+   * @param callback The callback to execute when the comparison fails.
+   */
+  toMatchLibResourceTemplate(name: string, callback?: () => void): void;
 }
 
 /**
